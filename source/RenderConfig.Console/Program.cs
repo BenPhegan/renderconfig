@@ -25,6 +25,8 @@
 using System;
 using NDesk.Options;
 using RenderConfig.Core;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace RenderConfig.Console
 {
@@ -40,6 +42,7 @@ namespace RenderConfig.Console
         static void Main(string[] args)
         {
             Boolean showHelp = false;
+            Boolean showVersion = false;
             //Boolean verbose = false;
             RenderConfigConfig config = new RenderConfigConfig();
             config.DeleteOutputDirectory = false;
@@ -61,7 +64,8 @@ namespace RenderConfig.Console
                 .Add("d|deleteoutput", "Delete target output directory", delegate(string v) { if (v != null) config.DeleteOutputDirectory = true; })
                 .Add("l|clean", "Clean XML output files", delegate(string v) { if (v != null) config.CleanOutput = true; })
                 .Add("b|break", "Break on no match", delegate(string v) { if (v != null) config.BreakOnNoMatch = true; })
-                .Add("p|preserve", "Preserve source directory structure when outputting", delegate(string v) { if (v != null) config.PreserveSourceStructure = true; });
+                .Add("p|preserve", "Preserve source directory structure when outputting", delegate(string v) { if (v != null) config.PreserveSourceStructure = true; })
+                .Add("v|version", "Output the version", delegate(string v) { if (v != null) showVersion = true; });
 
                 options.Parse(args);
             }
@@ -74,9 +78,17 @@ namespace RenderConfig.Console
                 System.Console.ResetColor();
                 System.Environment.Exit(1);
             }
+
+            if (showVersion)
+            {
+                ReportExeAndVersion();
+                System.Console.ResetColor();
+                System.Environment.Exit(1);
+            }
+
             if (showHelp || args.Length == 0)
             {
-                System.Console.WriteLine("RenderConfig.exe ");
+                ReportExeAndVersion();
                 System.Console.WriteLine("Renders stuff");
                 options.WriteOptionDescriptions(System.Console.Out);
                 System.Console.ResetColor();
@@ -113,6 +125,14 @@ namespace RenderConfig.Console
 
             System.Console.ResetColor();
 
+        }
+
+        private static void ReportExeAndVersion()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
+            System.Console.WriteLine("RenderConfig.exe ");
+            System.Console.WriteLine("Version: " + fileVersion.FileVersion.ToString());
         }
 
         /// <summary>
