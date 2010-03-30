@@ -1,0 +1,76 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RenderConfig.Console</RootNamespace>
+    <AssemblyName>RenderConfig.Console</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build.$(Configuration)</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Build.$(Configuration)</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NDesk.Options, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\external\NDesk.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RenderConfig.Core\RenderConfig.Core.csproj">
+      <Project>{E262070A-8113-490b-A345-B2A8D73149B0}</Project>
+      <Name>RenderConfig.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)tools\ilmerge\ilmerge" /target:exe /out:"$(TargetDir)RenderConfig.exe" "$(TargetDir)RenderConfig.Console.exe" "$(TargetDir)RenderConfig.Core.XmlSerializers.dll" "$(TargetDir)Nini.dll"  "$(TargetDir)GraphSearch.dll" "$(TargetDir)RenderConfig.Core.dll"  "$(TargetDir)NDesk.Options.dll"
+mkdir $(TargetDir)..\Deploy.$(Configuration)
+mkdir $(TargetDir)..\Deploy.$(Configuration)\Examples
+xcopy $(TargetDir)RenderConfig.exe  $(TargetDir)..\Deploy.$(Configuration) /y /i
+xcopy $(TargetDir)Configuration.xsd  $(TargetDir)..\Deploy.$(Configuration) /y /i
+rem xcopy $(TargetDir)Examples $(TargetDir)..\Deploy.$(Configuration)\Examples /s /e /y</PostBuildEvent>
+    <PreBuildEvent>"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\sgen.exe" /a:$(TargetDir)RenderConfig.Core.dll /f</PreBuildEvent>
+  </PropertyGroup>
+</Project>

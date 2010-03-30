@@ -1,0 +1,35 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectGuid>{BC8905CE-6485-4a82-9EA6-F200803C0653}</ProjectGuid>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\Build.$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\Build.$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(CCNetWorkingDirectory)'==''">
+      <PropertyGroup>
+        <LocalBuild>True</LocalBuild>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <LocalBuild>false</LocalBuild>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <Target Name="Build">
+    <Exec Command="copy /y .\config\GlobalAssemblyInfo.cs ..\GlobalAssemblyInfo.cs " Condition="$(LocalBuild)=='true'" IgnoreExitCode="true" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="Build" />
+  <Target Name="Clean">
+  </Target>
+</Project>

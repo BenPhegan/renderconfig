@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="RenderConfig" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="RenderConfig" msdata:IsDataSet="true" msdata:Locale="en-US">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Includes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Include" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="file" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Configurations" minOccurs="1" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Configuration" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                   <xs:sequence>
+                    <xs:element name="EnvironmentVariables" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="EnvironmentVariable" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:simpleContent msdata:ColumnName="EnvironmentVariable_Text" msdata:Ordinal="1">
+                                <xs:extension base="xs:string">
+                                  <xs:attribute name="variable" type="xs:string" />
+                                </xs:extension>
+                              </xs:simpleContent>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="TargetFiles" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="XML" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Add" type="XmlAdd" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="Update" type="XmlUpdate" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="Delete" type="XmlDelete" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="Replace" type="XmlReplace" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                              </xs:sequence>
+                              <xs:attribute name="source" type="xs:string" />
+                              <xs:attribute name="destination" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="INI" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Add" type="IniAdd" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="Update" type="IniUpdate" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="Delete" type="IniDelete" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="Replace" type="IniReplace" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                              </xs:sequence>
+                              <xs:attribute name="source" type="xs:string" />
+                              <xs:attribute name="destination" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="TXT" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Replace" type="IniReplace" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                              </xs:sequence>
+                              <xs:attribute name="source" type="xs:string" />
+                              <xs:attribute name="destination" type="xs:string" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="Name" type="xs:string"></xs:attribute>
+                  <xs:attribute name="Depends" type="xs:string" ></xs:attribute>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="XmlAdd">
+    <xs:simpleContent msdata:ColumnName="XmlAdd_Text">
+      <xs:extension base="xs:string">
+        <xs:attribute name="xpath" type="xs:string" />
+        <xs:attribute name="attribute" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="XmlUpdate">
+    <xs:simpleContent msdata:ColumnName="XmlUpdate_Text">
+      <xs:extension base="xs:string">
+        <xs:attribute name="xpath" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="XmlDelete">
+    <xs:simpleContent msdata:ColumnName="XmlDelete_Text">
+      <xs:extension base="xs:string">
+        <xs:attribute name="xpath" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="XmlReplace">
+    <xs:simpleContent msdata:ColumnName="XmlReplace_Text">
+      <xs:extension base="xs:string">
+        <xs:attribute name="regex" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="IniAdd">
+      <xs:simpleContent msdata:ColumnName="IniAdd_Text">
+        <xs:extension base="xs:string">
+          <xs:attribute name="section" type="xs:string" />
+          <xs:attribute name="key" type="xs:string" />
+        </xs:extension>
+      </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="IniUpdate">
+      <xs:simpleContent msdata:ColumnName="IniUpdate_Text">
+        <xs:extension base="xs:string">
+          <xs:attribute name="section" type="xs:string" />
+          <xs:attribute name="key" type="xs:string" />
+        </xs:extension>
+      </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="IniDelete">
+      <xs:attribute name="section" type="xs:string" />
+      <xs:attribute name="key" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="IniReplace">
+      <xs:simpleContent msdata:ColumnName="IniReplace_Text">
+        <xs:extension base="xs:string">
+          <xs:attribute name="regex" type="xs:string" />
+        </xs:extension>
+      </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="TxtReplace">
+      <xs:simpleContent msdata:ColumnName="TxtReplace_Text">
+        <xs:extension base="xs:string">
+          <xs:attribute name="regex" type="xs:string" />
+        </xs:extension>
+      </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

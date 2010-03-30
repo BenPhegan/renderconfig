@@ -1,0 +1,212 @@
+using System;
+using System.IO;
+using System.Xml;
+using Nini.Config;
+using NUnit.Core;
+using NUnit.Framework;
+using RenderConfig.Console;
+
+
+namespace RenderConfig.Core.Tests
+{
+    [TestFixture]
+    public class ConfigurationTests
+    {//   Copyright (c) 2010 Ben Phegan
+
+        //   Permission is hereby granted, free of charge, to any person
+        //   obtaining a copy of this software and associated documentation
+        //   files (the "Software"), to deal in the Software without
+        //   restriction, including without limitation the rights to use,
+        //   copy, modify, merge, publish, distribute, sublicense, and/or sell
+        //   copies of the Software, and to permit persons to whom the
+        //   Software is furnished to do so, subject to the following
+        //   conditions:
+
+        //   The above copyright notice and this permission notice shall be
+        //   included in all copies or substantial portions of the Software.
+
+        //   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+        //   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+        //   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+        //   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+        //   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+        //   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+        //   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+        //   OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+        RenderConfigConfig config;
+        IRenderConfigLogger log = new ConsoleLogger();
+        RenderConfigEngine engine;
+
+        [SetUp]
+        public void Setup()
+        {
+            config = new RenderConfigConfig();
+            config.ConfigFile = "examples\\config.other.xml";
+            config.Configuration = "config";
+            config.OutputDirectory = "testing\\config";
+            config.InputDirectory = "Examples";
+            config.BreakOnNoMatch = false;
+        }
+
+        [Test]
+        public void CheckXMLSingleVariableSubstitution()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(".\\testing\\config\\variablesubsingle.xml");
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, Environment.GetEnvironmentVariable("TEMP"));
+        }
+
+        [Test]
+        public void NonExistentDependencyCausesException()
+        {
+            config.ConfigFile = "examples\\config.bad.xml";
+            config.Configuration = "incorrectdependency";
+            config.OutputDirectory = "testing\\incorrectdependency";
+            config.InputDirectory = "TestFiles";
+            RenderConfigEngine engine = new RenderConfigEngine(config, log);
+            Assert.Throws<ApplicationException>(delegate { engine.Render(); });
+        }
+
+
+        [Test]
+        public void CheckXMLMultipleVariableSubstitution()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render(); 
+            XmlDocument doc = new XmlDocument();
+            doc.Load(".\\testing\\config\\variablesubmultiple.xml");
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("TEMP"), string.Concat(Environment.GetEnvironmentVariable("windir"))));
+        }
+        [Test]
+        public void CheckXMLMultipleVariableSubstitutionInterspersed()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(".\\testing\\config\\variablesubinterspersed.xml");
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("TEMP"), "blah",Environment.GetEnvironmentVariable("windir")));
+        }
+
+        [Test]
+        public void CheckINISingleVariableSubstitution()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            IConfigSource ini = new IniConfigSource(@".\testing\config\test.ini");
+            Assert.AreEqual(ini.Configs["Logging"].Get("File Name"), Environment.GetEnvironmentVariable("TEMP"));
+        }
+
+        [Test]
+        public void CheckINIMultipleVariableSubstitution()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            IConfigSource ini = new IniConfigSource(@".\testing\config\test.ini");
+            Assert.AreEqual(ini.Configs["Logging"].Get("Expansion1"), string.Concat(Environment.GetEnvironmentVariable("TEMP"), string.Concat(Environment.GetEnvironmentVariable("windir"))));
+        }
+        [Test]
+        public void CheckINIMultipleVariableSubstitutionInterspersed()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            IConfigSource ini = new IniConfigSource(@".\testing\config\test.ini");
+            Assert.AreEqual(ini.Configs["Logging"].Get("Expansion2"), string.Concat(Environment.GetEnvironmentVariable("TEMP"), "blah", Environment.GetEnvironmentVariable("windir")));
+        }
+
+        [Test]
+        public void MultipleDependencyCheck()
+        {
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            Assert.IsTrue(File.Exists(".\\testing\\config\\MultipleDependencies.xml"));
+            XmlDocument doc = new XmlDocument();
+            doc.Load(".\\testing\\config\\multipledependencies.xml");
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, "Child1");
+
+        }
+
+        [Test]
+        public void CanReferenceInputDirectory()
+        {
+            config.Configuration = "inputdirectory";
+            config.OutputDirectory = "testing\\InputDirectory";
+            config.InputDirectory = "Examples";
+            config.BreakOnNoMatch = false;
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+
+            Assert.True(File.Exists("testing\\InputDirectory\\test.xml"));
+        }
+
+        [Test]
+        public void CanPreserveSourceStructure()
+        {
+            CreateTestFilesDirectory();
+
+            config.Configuration = "preservestructure";
+            config.OutputDirectory = "testing\\PreserveStructure";
+            config.PreserveSourceStructure = true;
+            config.BreakOnNoMatch = false;
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+
+            Assert.True(File.Exists("testing\\preservestructure\\TestFiles\\test.xml"));
+            Directory.Delete("examples\\testfiles", true);
+        }
+
+        private static void CreateTestFilesDirectory()
+        {
+            if (Directory.Exists("examples\\testfiles"))
+            {
+                Directory.Delete("examples\\testfiles", true);
+            }
+            Directory.CreateDirectory("examples\\TestFiles");
+            File.Copy("examples\\test.xml", "examples\\TestFiles\\test.xml");
+        }
+
+        [Test]
+        public void DoesntPreserveSourceStructureWhenNotAsked()
+        {
+            CreateTestFilesDirectory();
+
+            config.Configuration = "preservestructure";
+            config.OutputDirectory = "testing\\DoesntPreserveStructure";
+            config.BreakOnNoMatch = false;
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+
+            Assert.True(!File.Exists("testing\\doesntpreservestructure\\TestFiles\\test.xml"));
+            Assert.True(File.Exists("testing\\doesntpreservestructure\\test.xml"));
+        }
+
+        [Test]
+        public void BadConfigDoesntLoad()
+        {
+            config.ConfigFile = "examples\\config.bad.xml";
+            config.Configuration = "preservestructure";
+            config.OutputDirectory = "testing\\BadConfig";
+            config.BreakOnNoMatch = false;
+            engine = new RenderConfigEngine(config, log);
+            Assert.Throws<ApplicationException>(delegate { engine.Render(); });
+        }
+
+        [Test]
+        public void IncludedFilesAvailable()
+        {
+            config.ConfigFile = "examples\\config.include.xml";
+            config.Configuration = "included";
+            config.OutputDirectory = "testing\\Included";
+            config.BreakOnNoMatch = false;
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            
+            Assert.True(File.Exists("testing\\Included\\included.xml"));
+        }
+    }
+}
