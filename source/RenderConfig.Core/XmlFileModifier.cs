@@ -144,7 +144,7 @@ namespace RenderConfig.Core
                         else
                         {
                             //See if we have a namespace in a parent...
-                            XmlNode tableNode = GetFirstParentNodeWithNamespaceUri(node);
+                            //XmlNode tableNode = GetFirstParentNodeWithNamespaceUri(node);
 
                             XmlDocumentFragment frag = document.CreateDocumentFragment();
                             frag.InnerXml = mod.Value;

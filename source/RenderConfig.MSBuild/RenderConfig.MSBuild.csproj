@@ -73,12 +73,12 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)tools\ilmerge\ilmerge" /target:windll /out:"$(TargetDir)MSBuild.RenderConfig.dll" "$(TargetDir)RenderConfig.MSBuild.dll" "$(TargetDir)Nini.dll"  "$(TargetDir)GraphSearch.dll" "$(TargetDir)RenderConfig.Core.XmlSerializers.dll" "$(TargetDir)RenderConfig.Core.dll"
+    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"$(SolutionDir)tools\ilmerge\ilmerge" /target:windll /out:"$(TargetDir)MSBuild.RenderConfig.dll" "$(TargetDir)RenderConfig.MSBuild.dll" "$(TargetDir)Nini.dll"  "$(TargetDir)GraphSearch.dll" "$(TargetDir)RenderConfig.Core.XmlSerializers.dll" "$(TargetDir)RenderConfig.Core.dll"
 mkdir $(TargetDir)..\Deploy.$(Configuration)
 mkdir $(TargetDir)..\Deploy.$(Configuration)\Examples
 xcopy $(TargetDir)MSBuild.RenderConfig.dll  $(TargetDir)..\Deploy.$(Configuration) /y /i
 xcopy $(TargetDir)Configuration.xsd  $(TargetDir)..\Deploy.$(Configuration) /y /i
 xcopy $(TargetDir)Examples $(TargetDir)..\Deploy.$(Configuration)\Examples /s /e /y</PostBuildEvent>
-    <PreBuildEvent>"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\sgen.exe" /a:$(TargetDir)RenderConfig.Core.dll /f</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\sgen.exe" /a:$(TargetDir)RenderConfig.Core.dll /f</PreBuildEvent>
   </PropertyGroup>
 </Project>

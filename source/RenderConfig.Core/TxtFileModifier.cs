@@ -57,16 +57,25 @@ namespace RenderConfig.Core
         /// <returns></returns>
         public bool Run()
         {
+			int count = 0;
             foreach (IniReplace mod in file.Replace)
             {
                 mod.Value = RenderConfigEngine.ReplaceEnvironmentVariables(mod.Value);
                 LogUtilities.LogKeyValue("TYPE", "REPLACE", 27, MessageImportance.High, log);
                 LogUtilities.LogKeyValue("REGEX", mod.regex, 27, MessageImportance.Normal, log);
                 LogUtilities.LogKeyValue("VALUE", mod.Value, 27, MessageImportance.Normal, log);
-                LogUtilities.LogCount(RenderConfigEngine.ReplaceTokenInFile(mod.regex, mod.Value, targetFile),log);
+				count = RenderConfigEngine.ReplaceTokenInFile(mod.regex, mod.Value, targetFile);
+                LogUtilities.LogCount(count,log);
             }
             //TODO
-            return true;
+			if (breakOnNoMatch && count == 0)
+			{
+				return false;
+			}
+			else
+			{
+	            return true;				
+			}
         }
     }
 }

@@ -27,7 +27,8 @@
     </Otherwise>
   </Choose>
   <Target Name="Build">
-    <Exec Command="copy /y .\config\GlobalAssemblyInfo.cs ..\GlobalAssemblyInfo.cs " Condition="$(LocalBuild)=='true'" IgnoreExitCode="true" />
+	<Delete Files="..\GlobalAssemblyInfo.cs" />
+  	<Copy SourceFiles=".\config\GlobalAssemblyInfo.cs" DestinationFolder=".." Condition="$(LocalBuild)=='true'"/>
   </Target>
   <Target Name="Rebuild" DependsOnTargets="Build" />
   <Target Name="Clean">
