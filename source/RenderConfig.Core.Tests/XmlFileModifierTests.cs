@@ -26,6 +26,8 @@ using System.Xml;
 using NUnit.Core;
 using NUnit.Framework;
 using RenderConfig.Console;
+using System.IO;
+using System;
 
 namespace RenderConfig.Core.Tests
 {
@@ -35,14 +37,15 @@ namespace RenderConfig.Core.Tests
         RenderConfigEngine engine;
         IRenderConfigLogger log = new ConsoleLogger();
         RenderConfigConfig config;
+        DirectoryInfo od = new DirectoryInfo(String.Concat("testing" , Path.DirectorySeparatorChar , "xml"));
 
         [TestFixtureSetUp]
         public void Setup()
         {
             config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.xml.xml";
+            config.ConfigFile = String.Concat("examples",Path.DirectorySeparatorChar, "config.xml.xml");
             config.Configuration = "xmlfilemodifier";
-            config.OutputDirectory = "testing\\xml";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar, "xml");
             config.BreakOnNoMatch = false;
             config.InputDirectory = "Examples";
         }
@@ -54,7 +57,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/configuration/configSections/section[@value='xmladd']"));
         }
 
@@ -65,7 +68,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render(); 
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/configuration/nhibernate/add[@random='xmladd']"));
         }
 
@@ -76,7 +79,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/configuration/nhibernate/Node"));
         }
 
@@ -87,7 +90,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.ns.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/r:configuration/r:configSections/r:section[@value='xmladd']",GetManager(doc)));
         }
 
@@ -98,7 +101,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.ns.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:add[@random='xmladd']", GetManager(doc)));
         }
 
@@ -109,7 +112,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.ns.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:Node", GetManager(doc)));
         }
 
@@ -120,7 +123,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmladd.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmladd.ns.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/r:configuration/r:nhibernate", GetManager(doc)).InnerText);
         }
 
@@ -131,7 +134,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmldelete.xml");
+            doc.Load(Path.Combine(od.FullName,"xmldelete.xml"));
             Assert.IsNull(doc.SelectSingleNode("/configuration/nhibernate/add[@key='hibernate.dialect']"));
         }
 
@@ -142,7 +145,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmldelete.xml"); 
+            doc.Load(Path.Combine(od.FullName,"xmldelete.xml"));
             Assert.IsNull(doc.SelectSingleNode("/configuration/configSections/section"));
         }
 
@@ -153,7 +156,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmldelete.xml"); 
+            doc.Load(Path.Combine(od.FullName,"xmldelete.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/configuration/nhibernate/add[@key='hibernate.connection.driver_class']"));
             Assert.IsNull(doc.SelectSingleNode("/configuration/nhibernate/add[@key='hibernate.connection.driver_class']").Attributes["Value"]);
         }
@@ -165,7 +168,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmldelete.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmldelete.ns.xml"));
             Assert.IsNull(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:add[@key='hibernate.dialect']", GetManager(doc)));
         }
 
@@ -176,7 +179,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmldelete.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmldelete.ns.xml"));
             Assert.IsNull(doc.SelectSingleNode("/r:configuration/r:configSections/r:section", GetManager(doc)));
         }
 
@@ -188,7 +191,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmldelete.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmldelete.ns.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:add[@key='hibernate.connection.driver_class']", GetManager(doc)));
             Assert.IsNull(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:add[@key='hibernate.connection.driver_class']", GetManager(doc)).Attributes["Value"]);
         }
@@ -200,7 +203,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmlupdate.xml");
+            doc.Load(Path.Combine(od.FullName,"xmlupdate.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/nhibernate/add[@key='hibernate.dialect']").Attributes["value"].Value, "xmlupdate");
         }
 
@@ -211,7 +214,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmlupdate.xml");
+            doc.Load(Path.Combine(od.FullName,"xmlupdate.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, "xmlupdate");
         }
 
@@ -222,7 +225,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmlupdate.ns.xml");
+            doc.Load(Path.Combine(od.FullName,"xmlupdate.ns.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:add[@key='hibernate.dialect']",GetManager(doc)).Attributes["value"].Value, "xmlupdate");
         }
 
@@ -233,7 +236,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xml\\xmlupdate.ns.xml");
+            doc.Load(Path.Combine(od.FullName, "xmlupdate.ns.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/r:configuration/r:Random", GetManager(doc)).InnerText, "xmlupdate");
         }
 
@@ -249,9 +252,9 @@ namespace RenderConfig.Core.Tests
         public void ReplaceMultipleSubString()
         {
             RenderConfigConfig config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.xml.xml";
+            config.ConfigFile = String.Concat("examples",Path.DirectorySeparatorChar, "config.xml.xml");
             config.Configuration = "xmlreplace";
-            config.OutputDirectory = "testing\\xmlreplace";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar,"xmlreplace");
             config.InputDirectory = "examples";
             config.BreakOnNoMatch = false;
             IRenderConfigLogger log = new ConsoleLogger();
@@ -259,10 +262,10 @@ namespace RenderConfig.Core.Tests
             engine.Render();
 
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\xmlreplace\\xmlreplace.xml");
+            doc.Load(String.Concat("testing",Path.DirectorySeparatorChar,"xmlreplace",Path.DirectorySeparatorChar,"xmlreplace.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/configuration/ReplacementRandom"));
 
-            doc.Load(".\\testing\\xmlreplace\\xmlreplace.ns.xml");
+            doc.Load(String.Concat("testing", Path.DirectorySeparatorChar, "xmlreplace", Path.DirectorySeparatorChar, "xmlreplace.ns.xml"));
             Assert.IsNotNull(doc.SelectSingleNode("/r:configuration/r:ReplacementRandom", GetManager(doc)));
         }
 
