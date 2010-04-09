@@ -273,9 +273,9 @@ namespace RenderConfig.Core.Tests
         public void ReplacementResultingInInvalidXmlThrowsException()
         {
             RenderConfigConfig config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.xml.xml";
+            config.ConfigFile = String.Concat("examples",Path.DirectorySeparatorChar, "config.xml.xml");
             config.Configuration = "xmlreplacebad";
-            config.OutputDirectory = "testing\\xmlreplace";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar, "xmlreplace");
             config.InputDirectory = "examples";
             config.BreakOnNoMatch = false;
             IRenderConfigLogger log = new ConsoleLogger();
@@ -287,9 +287,9 @@ namespace RenderConfig.Core.Tests
         public void SettingVariables()
         {
             RenderConfigConfig config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.xml.xml";
+            config.ConfigFile = String.Concat("examples",Path.DirectorySeparatorChar, "config.xml.xml");
             config.Configuration = "variabletest1";
-            config.OutputDirectory = "testing\\variabletest1";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar, "variabletest1");
             config.InputDirectory = "examples";
             config.BreakOnNoMatch = false;
             IRenderConfigLogger log = new ConsoleLogger();
@@ -297,7 +297,7 @@ namespace RenderConfig.Core.Tests
             engine.Render();
 
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\variabletest1\\test.xml");
+            doc.Load(String.Concat("testing", Path.DirectorySeparatorChar, "variabletest1", Path.DirectorySeparatorChar, "test.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText,"variabletest1");
         }
 

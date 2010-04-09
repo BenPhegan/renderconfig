@@ -106,10 +106,10 @@ namespace RenderConfig.Core
         private void CheckAndModifySourceAndDestination(RenderConfigConfig config, ITargetFile file)
         {
             //Check to see if we want to preserve the directory structure....
+            FileInfo t = new FileInfo(file.source);
             if (config.PreserveSourceStructure)
             {
-                FileInfo t = new FileInfo(file.source);
-                if (file.destination == null)
+                 if (file.destination == null)
                 {
                     file.destination = file.source;
                 }
@@ -124,6 +124,10 @@ namespace RenderConfig.Core
             {
                 file.source = Path.Combine(config.InputDirectory, file.source);
             }
+			else
+			{
+				file.source = t.FullName;
+			}
 
             LogUtilities.LogTargetFileHeader(file.source, file.destination, config.InputDirectory,config.OutputDirectory, log);
 
