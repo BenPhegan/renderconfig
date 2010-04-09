@@ -25,6 +25,7 @@
 using System.IO;
 using NUnit.Framework;
 using RenderConfig.Console;
+using System;
 
 namespace RenderConfig.Core.Tests
 {
@@ -39,9 +40,9 @@ namespace RenderConfig.Core.Tests
         public void Setup()
         {
             config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.txt.xml";
+            config.ConfigFile = String.Concat("examples", Path.DirectorySeparatorChar, "config.txt.xml");
             config.Configuration = "textreplace";
-            config.OutputDirectory = "testing\\text";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar,"text");
             config.InputDirectory = "examples";
             config.BreakOnNoMatch = false;
         }
@@ -52,7 +53,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
 
-            string text = File.ReadAllText(".\\testing\\text\\textreplace.txt");
+            string text = File.ReadAllText(String.Concat("testing", Path.DirectorySeparatorChar, "text", Path.DirectorySeparatorChar,"textreplace.txt"));
             Assert.IsTrue(text.Contains("Replacement!!!"));
         }
 

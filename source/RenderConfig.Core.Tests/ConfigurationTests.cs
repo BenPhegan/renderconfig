@@ -1,17 +1,4 @@
-using System;
-using System.IO;
-using System.Xml;
-using Nini.Config;
-using NUnit.Core;
-using NUnit.Framework;
-using RenderConfig.Console;
-
-
-namespace RenderConfig.Core.Tests
-{
-    [TestFixture]
-    public class ConfigurationTests
-    {//   Copyright (c) 2010 Ben Phegan
+//   Copyright (c) 2010 Ben Phegan
 
         //   Permission is hereby granted, free of charge, to any person
         //   obtaining a copy of this software and associated documentation
@@ -34,7 +21,21 @@ namespace RenderConfig.Core.Tests
         //   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
         //   OTHER DEALINGS IN THE SOFTWARE.
 
+using System;
+using System.IO;
+using System.Xml;
+using Nini.Config;
+using NUnit.Core;
+using NUnit.Framework;
+using RenderConfig.Console;
 
+
+namespace RenderConfig.Core.Tests
+{
+    [TestFixture]
+    public class ConfigurationTests
+    {
+        DirectoryInfo od = new DirectoryInfo(String.Concat("testing", Path.DirectorySeparatorChar, "config"));
 
         RenderConfigConfig config;
         IRenderConfigLogger log = new ConsoleLogger();
@@ -58,7 +59,7 @@ namespace RenderConfig.Core.Tests
             engine.Render();
 
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\config\\variablesubsingle.xml");
+            doc.Load(Path.Combine(od.FullName, "variablesubsingle.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, Environment.GetEnvironmentVariable("TEMP"));
         }
 
@@ -80,7 +81,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render(); 
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\config\\variablesubmultiple.xml");
+            doc.Load(Path.Combine(od.FullName, "variablesubmultiple.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("TEMP"), string.Concat(Environment.GetEnvironmentVariable("windir"))));
         }
         [Test]
@@ -89,7 +90,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\config\\variablesubinterspersed.xml");
+            doc.Load(Path.Combine(od.FullName, "variablesubinterspersed.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("TEMP"), "blah",Environment.GetEnvironmentVariable("windir")));
         }
 
@@ -98,7 +99,7 @@ namespace RenderConfig.Core.Tests
         {
             engine = new RenderConfigEngine(config, log);
             engine.Render();
-            IConfigSource ini = new IniConfigSource(@".\testing\config\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.AreEqual(ini.Configs["Logging"].Get("File Name"), Environment.GetEnvironmentVariable("TEMP"));
         }
 
@@ -107,7 +108,7 @@ namespace RenderConfig.Core.Tests
         {
             engine = new RenderConfigEngine(config, log);
             engine.Render();
-            IConfigSource ini = new IniConfigSource(@".\testing\config\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.AreEqual(ini.Configs["Logging"].Get("Expansion1"), string.Concat(Environment.GetEnvironmentVariable("TEMP"), string.Concat(Environment.GetEnvironmentVariable("windir"))));
         }
         [Test]
@@ -115,7 +116,7 @@ namespace RenderConfig.Core.Tests
         {
             engine = new RenderConfigEngine(config, log);
             engine.Render();
-            IConfigSource ini = new IniConfigSource(@".\testing\config\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.AreEqual(ini.Configs["Logging"].Get("Expansion2"), string.Concat(Environment.GetEnvironmentVariable("TEMP"), "blah", Environment.GetEnvironmentVariable("windir")));
         }
 
@@ -124,9 +125,9 @@ namespace RenderConfig.Core.Tests
         {
             engine = new RenderConfigEngine(config, log);
             engine.Render();
-            Assert.IsTrue(File.Exists(".\\testing\\config\\MultipleDependencies.xml"));
+            Assert.IsTrue(File.Exists(Path.Combine(od.FullName, "MultipleDependencies.xml")));
             XmlDocument doc = new XmlDocument();
-            doc.Load(".\\testing\\config\\multipledependencies.xml");
+            doc.Load(Path.Combine(od.FullName, "multipledependencies.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, "Child1");
 
         }
@@ -135,13 +136,13 @@ namespace RenderConfig.Core.Tests
         public void CanReferenceInputDirectory()
         {
             config.Configuration = "inputdirectory";
-            config.OutputDirectory = "testing\\InputDirectory";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar,"InputDirectory");
             config.InputDirectory = "Examples";
             config.BreakOnNoMatch = false;
             engine = new RenderConfigEngine(config, log);
             engine.Render();
 
-            Assert.True(File.Exists("testing\\InputDirectory\\test.xml"));
+            Assert.True(File.Exists(String.Concat("testing",Path.DirectorySeparatorChar,"InputDirectory",Path.DirectorySeparatorChar,"test.xml")));
         }
 
         [Test]
@@ -150,24 +151,25 @@ namespace RenderConfig.Core.Tests
             CreateTestFilesDirectory();
 
             config.Configuration = "preservestructure";
-            config.OutputDirectory = "testing\\PreserveStructure";
+            config.OutputDirectory = String.Concat("testing", Path.DirectorySeparatorChar, "PreserveStructure");
             config.PreserveSourceStructure = true;
             config.BreakOnNoMatch = false;
             engine = new RenderConfigEngine(config, log);
             engine.Render();
 
-            Assert.True(File.Exists("testing\\preservestructure\\TestFiles\\test.xml"));
+            Assert.True(File.Exists(String.Concat("testing",Path.DirectorySeparatorChar,"preservestructure",Path.DirectorySeparatorChar,"TestFiles",Path.DirectorySeparatorChar,"test.xml")));
             Directory.Delete("examples\\testfiles", true);
         }
 
         private static void CreateTestFilesDirectory()
         {
-            if (Directory.Exists("examples\\testfiles"))
+            string dir = String.Concat("examples", Path.DirectorySeparatorChar, "testfiles");
+            if (Directory.Exists(dir))
             {
-                Directory.Delete("examples\\testfiles", true);
+                Directory.Delete(dir, true);
             }
-            Directory.CreateDirectory("examples\\TestFiles");
-            File.Copy("examples\\test.xml", "examples\\TestFiles\\test.xml");
+            Directory.CreateDirectory(dir);
+            File.Copy(String.Concat("examples",Path.DirectorySeparatorChar,"test.xml"), String.Concat(dir,Path.DirectorySeparatorChar,"test.xml"));
         }
 
         [Test]
@@ -175,22 +177,23 @@ namespace RenderConfig.Core.Tests
         {
             CreateTestFilesDirectory();
 
+            string dir = String.Concat("testing", Path.DirectorySeparatorChar, "DoesntPreserveStructure");
             config.Configuration = "preservestructure";
-            config.OutputDirectory = "testing\\DoesntPreserveStructure";
+            config.OutputDirectory = dir;
             config.BreakOnNoMatch = false;
             engine = new RenderConfigEngine(config, log);
             engine.Render();
 
-            Assert.True(!File.Exists("testing\\doesntpreservestructure\\TestFiles\\test.xml"));
-            Assert.True(File.Exists("testing\\doesntpreservestructure\\test.xml"));
+            Assert.True(!File.Exists(String.Concat(dir,Path.DirectorySeparatorChar,"TestFiles",Path.DirectorySeparatorChar,"test.xml")));
+            Assert.True(File.Exists(String.Concat(dir,Path.DirectorySeparatorChar,"test.xml")));
         }
 
         [Test]
         public void BadConfigDoesntLoad()
         {
-            config.ConfigFile = "examples\\config.bad.xml";
+            config.ConfigFile = String.Concat("examples",Path.DirectorySeparatorChar,"config.bad.xml");
             config.Configuration = "preservestructure";
-            config.OutputDirectory = "testing\\BadConfig";
+            config.OutputDirectory = "blah";
             config.BreakOnNoMatch = false;
             engine = new RenderConfigEngine(config, log);
             Assert.Throws<ApplicationException>(delegate { engine.Render(); });
@@ -199,14 +202,15 @@ namespace RenderConfig.Core.Tests
         [Test]
         public void IncludedFilesAvailable()
         {
-            config.ConfigFile = "examples\\config.include.xml";
+            string dir = String.Concat("testing", Path.DirectorySeparatorChar, "Included");
+            config.ConfigFile = String.Concat("examples", Path.DirectorySeparatorChar, "config.include.xml");
             config.Configuration = "included";
-            config.OutputDirectory = "testing\\Included";
+            config.OutputDirectory = dir;
             config.BreakOnNoMatch = false;
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             
-            Assert.True(File.Exists("testing\\Included\\included.xml"));
+            Assert.True(File.Exists(String.Concat(dir,Path.DirectorySeparatorChar,"included.xml")));
         }
     }
 }

@@ -26,6 +26,8 @@ using Nini.Config;
 using NUnit.Core;
 using NUnit.Framework;
 using RenderConfig.Console;
+using System.IO;
+using System;
 
 
 namespace RenderConfig.Core.Tests
@@ -33,6 +35,8 @@ namespace RenderConfig.Core.Tests
     [TestFixture]
     public class IniFileModifierTests
     {
+        DirectoryInfo od = new DirectoryInfo(String.Concat("testing", Path.DirectorySeparatorChar, "ini"));
+
         [SetUp]
         public void Setup()
         {
@@ -45,9 +49,9 @@ namespace RenderConfig.Core.Tests
         private static RenderConfigConfig GetConfigObject()
         {
             RenderConfigConfig config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.ini.xml";
+            config.ConfigFile = String.Concat("examples", Path.DirectorySeparatorChar, "config.ini.xml");
             config.Configuration = "inifilemodifier";
-            config.OutputDirectory = "testing\\ini";
+            config.OutputDirectory = String.Concat("testing", Path.DirectorySeparatorChar, "ini");
             config.InputDirectory = "Examples";
             config.BreakOnNoMatch = false;
             return config;
@@ -58,7 +62,7 @@ namespace RenderConfig.Core.Tests
         {
             //<Modification type="add" section="Logging" key="CommonSetting">Value for common setting</Modification>
 
-            IConfigSource ini = new IniConfigSource(@".\testing\ini\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName,"test.ini"));
             Assert.AreEqual(ini.Configs["Logging"].Get("CommonSetting"), "Value for common setting");
         }
 
@@ -67,7 +71,7 @@ namespace RenderConfig.Core.Tests
         {
             //<Modification type="add" section="NewSection" key="FromCommon">BLAH!</Modification>
 
-            IConfigSource ini = new IniConfigSource(@".\testing\ini\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.AreEqual(ini.Configs["NewSection"].Get("FromCommon"), "BLAH!");
 
         }
@@ -77,7 +81,7 @@ namespace RenderConfig.Core.Tests
         {
             //<Modification type="delete" section="Logging" key="MessageColumns"/>
 
-            IConfigSource ini = new IniConfigSource(@".\testing\ini\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.AreEqual(ini.Configs["Logging"].Get("MessageColumns"), null);
         }
 
@@ -86,7 +90,7 @@ namespace RenderConfig.Core.Tests
         {
             //<Modification type="update" section="Logging" key="MaxFileSize">69</Modification>
 
-            IConfigSource ini = new IniConfigSource(@".\testing\ini\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.AreEqual(ini.Configs["Logging"].Get("MaxFileSize"), "69");
         }
 
@@ -126,7 +130,7 @@ namespace RenderConfig.Core.Tests
             RenderConfigEngine engine = new RenderConfigEngine(config, log);
 
             engine.Render();
-            IConfigSource ini = new IniConfigSource(@".\testing\ini\test.ini");
+            IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
             Assert.IsTrue(ini.Configs["Logging"].Contains("Replacement1"));
             Assert.IsTrue(ini.Configs["Logging"].Contains("Replacement2"));
             Assert.IsTrue(ini.Configs["Logging"].Contains("Replacement3"));
