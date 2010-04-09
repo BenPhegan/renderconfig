@@ -45,9 +45,9 @@ namespace RenderConfig.Core.Tests
         public void Setup()
         {
             config = new RenderConfigConfig();
-            config.ConfigFile = "examples\\config.other.xml";
+            config.ConfigFile = String.Concat("examples",Path.DirectorySeparatorChar,"config.other.xml");
             config.Configuration = "config";
-            config.OutputDirectory = "testing\\config";
+            config.OutputDirectory = od.FullName;
             config.InputDirectory = "Examples";
             config.BreakOnNoMatch = false;
         }
@@ -66,9 +66,9 @@ namespace RenderConfig.Core.Tests
         [Test]
         public void NonExistentDependencyCausesException()
         {
-            config.ConfigFile = "examples\\config.bad.xml";
+            config.ConfigFile = String.Concat("examples", Path.DirectorySeparatorChar, "config.bad.xml");
             config.Configuration = "incorrectdependency";
-            config.OutputDirectory = "testing\\incorrectdependency";
+            config.OutputDirectory = String.Concat("testing",Path.DirectorySeparatorChar,"incorrectdependency");
             config.InputDirectory = "TestFiles";
             RenderConfigEngine engine = new RenderConfigEngine(config, log);
             Assert.Throws<ApplicationException>(delegate { engine.Render(); });
@@ -158,7 +158,7 @@ namespace RenderConfig.Core.Tests
             engine.Render();
 
             Assert.True(File.Exists(String.Concat("testing",Path.DirectorySeparatorChar,"preservestructure",Path.DirectorySeparatorChar,"TestFiles",Path.DirectorySeparatorChar,"test.xml")));
-            Directory.Delete("examples\\testfiles", true);
+            Directory.Delete(String.Concat("examples",Path.DirectorySeparatorChar,"testfiles"), true);
         }
 
         private static void CreateTestFilesDirectory()
