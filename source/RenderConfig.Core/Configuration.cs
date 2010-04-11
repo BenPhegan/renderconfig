@@ -115,6 +115,12 @@ namespace RenderConfig.Core
                 }
                 else
                 {
+					//TODO This is broken
+					if (file.source.IndexOf(t.Name) != Path.DirectorySeparatorChar)
+					{
+						char badSep = file.source[file.source.IndexOf(t.Name)];
+						file.source.Replace(badSep,Path.DirectorySeparatorChar);
+					}
                     file.destination = Path.Combine(file.source.Replace(t.Name, string.Empty), file.destination);
                 }
             }
