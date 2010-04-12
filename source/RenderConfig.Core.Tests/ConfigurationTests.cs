@@ -212,5 +212,30 @@ namespace RenderConfig.Core.Tests
             
             Assert.True(File.Exists(String.Concat(dir,Path.DirectorySeparatorChar,"included.xml")));
         }
+
+        [Test]
+        public void MultipleConfigurationsOutputToSubDirectories()
+        {
+            string outputDir = String.Concat(config.OutputDirectory, Path.DirectorySeparatorChar, "multiconfigsub");
+            config.Configuration = "copy,copy2";
+            config.OutputDirectory = outputDir;
+            RenderConfigEngine.RunAllConfigurations(config, log);
+            Assert.IsTrue(File.Exists(Path.Combine(od.FullName, String.Concat(outputDir, Path.DirectorySeparatorChar, "copy", Path.DirectorySeparatorChar, "test.ns.xml"))));
+            Assert.IsTrue(File.Exists(Path.Combine(od.FullName, String.Concat(outputDir, Path.DirectorySeparatorChar, "copy2", Path.DirectorySeparatorChar, "test.ns.xml"))));
+        }
+
+        [Test]
+        public void MultipleConfigurationsOutputToSingleDirectory()
+        {
+            string outputDir = String.Concat(config.OutputDirectory, Path.DirectorySeparatorChar, "multiconfigsub");
+            config.Configuration = "copy,copy2";
+            config.OutputDirectory = outputDir;
+            config.SubDirectoryEachConfiguration = false;
+            RenderConfigEngine.RunAllConfigurations(config, log);
+            Assert.IsTrue(!File.Exists(Path.Combine(od.FullName, String.Concat(outputDir, Path.DirectorySeparatorChar, "copy", Path.DirectorySeparatorChar, "test.ns.xml"))));
+            Assert.IsTrue(!File.Exists(Path.Combine(od.FullName, String.Concat(outputDir, Path.DirectorySeparatorChar, "copy2", Path.DirectorySeparatorChar, "test.ns.xml"))));
+            Assert.IsTrue(!File.Exists(Path.Combine(od.FullName, String.Concat(outputDir, "test.ns.xml"))));
+        }
+
     }
 }

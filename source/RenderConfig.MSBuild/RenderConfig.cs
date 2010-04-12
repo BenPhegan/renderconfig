@@ -148,12 +148,11 @@ namespace RenderConfig.MSBuild
             config.InputDirectory = inputDirectory;
 
             IRenderConfigLogger log = new MSBuildLogger(Log);
-            RenderConfigEngine engine = new RenderConfigEngine(config, log);
             
             Boolean returnVal = true;
             try
             {
-                returnVal = engine.Render();
+                RenderConfigEngine.RunAllConfigurations(config, log);
             }
             catch (Exception i)
             {

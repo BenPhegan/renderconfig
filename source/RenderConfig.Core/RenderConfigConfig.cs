@@ -29,7 +29,7 @@ using GraphSearch;
 
 namespace RenderConfig.Core
 {
-    public class RenderConfigConfig
+    public class RenderConfigConfig : ICloneable
     {
         private string configFile;
         private string configuration;
@@ -39,6 +39,19 @@ namespace RenderConfig.Core
         private Boolean breakOnNoMatch = false;
         private string inputDirectory;
         private Boolean preserveSourceStructure;
+        private Boolean subDirectoryEachConfiguration = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether each configuration passed in should be output to a sub-drectory.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [sub directory each configuration]; otherwise, <c>false</c>.
+        /// </value>
+        public Boolean SubDirectoryEachConfiguration
+        {
+            get { return subDirectoryEachConfiguration; }
+            set { subDirectoryEachConfiguration = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether to [preserve source structure] when copying files.
@@ -123,5 +136,13 @@ namespace RenderConfig.Core
             set { breakOnNoMatch = value; }
         }
 
+        #region ICloneable Members
+
+        public object Clone()
+        {
+            return this.MemberwiseClone(); ;
+        }
+
+        #endregion
     }
 }

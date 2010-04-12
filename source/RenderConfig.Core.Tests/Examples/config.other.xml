@@ -20,6 +20,12 @@
       </TargetFiles>
     </Configuration>
 
+    <Configuration Name="copy2" >
+      <TargetFiles>
+        <XML source="test.ns.xml" />
+      </TargetFiles>
+    </Configuration>
+    
     <Configuration Name="inputdirectory" >
       <TargetFiles>
         <XML source="test.xml" destination="test.xml" />

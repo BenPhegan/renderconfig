@@ -49,6 +49,7 @@ namespace RenderConfig.Console
             config.CleanOutput = false;
             config.BreakOnNoMatch = true;
             config.PreserveSourceStructure = false;
+            config.SubDirectoryEachConfiguration = true;
 
             OptionSet options = null;
 
@@ -65,7 +66,8 @@ namespace RenderConfig.Console
                 .Add("l|clean", "Clean XML output files", delegate(string v) { if (v != null) config.CleanOutput = true; })
                 .Add("b|break", "Break on no match", delegate(string v) { if (v != null) config.BreakOnNoMatch = true; })
                 .Add("p|preserve", "Preserve source directory structure when outputting", delegate(string v) { if (v != null) config.PreserveSourceStructure = true; })
-                .Add("v|version", "Output the version", delegate(string v) { if (v != null) showVersion = true; });
+                .Add("v|version", "Output the version", delegate(string v) { if (v != null) showVersion = true; })
+                .Add("s|subdirperconfig", "Output each configuration to a sub-directory under the output directory.", delegate(string v) { if (v != null) config.SubDirectoryEachConfiguration = true; });
 
                 options.Parse(args);
             }
@@ -113,8 +115,7 @@ namespace RenderConfig.Console
             try
             {
                 IRenderConfigLogger log = new ConsoleLogger();
-                RenderConfigEngine engine = new RenderConfigEngine(config, log);
-                engine.Render();
+                RenderConfigEngine.RunAllConfigurations(config, log);
             }
             catch (Exception i)
             {

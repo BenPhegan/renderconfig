@@ -573,6 +573,34 @@ namespace RenderConfig.Core
 
             return returnString;
         }
+
+        public static Boolean RunAllConfigurations(RenderConfigConfig config, IRenderConfigLogger log)
+        {
+            Boolean returnBool = false;
+            if (config.Configuration.Contains(","))
+            {
+                string[] configs = config.Configuration.Split(',');
+                foreach (string configToRun in configs)
+                {
+                    RenderConfigConfig newConfig = (RenderConfigConfig)config.Clone();
+                    newConfig.Configuration = configToRun;
+                    if (config.SubDirectoryEachConfiguration)
+                    {
+                        newConfig.OutputDirectory = Path.Combine(newConfig.OutputDirectory, configToRun);
+                    }
+                    RenderConfigEngine engine = new RenderConfigEngine(newConfig, log);
+                    returnBool = engine.Render();
+                }
+            }
+            else
+            {
+                //TODO May need to allow people to actually override and use the config.SubDirectoryEachConfiguration for individual configs
+                RenderConfigEngine engine = new RenderConfigEngine(config, log);
+                return engine.Render();
+            }
+
+            return returnBool;
+        }
     }
 
 }
