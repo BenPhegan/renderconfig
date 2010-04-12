@@ -1,0 +1,5 @@
+<Configuration Name="included">
+  <TargetFiles>
+    <XML source="test.xml" destination="included.xml"/>
+  </TargetFiles>
+</Configuration>

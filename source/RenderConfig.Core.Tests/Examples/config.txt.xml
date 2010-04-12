@@ -1,0 +1,11 @@
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  <Configurations>
+    <Configuration Name="textreplace">
+      <TargetFiles>
+        <TXT source="test.ini" destination="textreplace.txt">
+          <Replace regex="Expansion">Replacement!!!</Replace>
+        </TXT>
+      </TargetFiles>
+    </Configuration>
+  </Configurations>
+</RenderConfig>

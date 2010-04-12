@@ -1,0 +1,8 @@
+<!-- Using a !DOCTYPE !ENTITY snippet, we can include an additional chunk of configuration-->
+<!-- This can be used in the same way as an <include/> but relies on MS XML, and is not as pretty-->
+<!DOCTYPE RenderConfig [
+  <!ENTITY xmladd SYSTEM "./config.entity.configuration.xml">
+]>
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  &xmladd;
+</RenderConfig>

@@ -1,0 +1,78 @@
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  <Configurations>
+    <Configuration Name="variablesubstitution">
+      <TargetFiles>
+        <XML source="test.xml" destination="variablesubsingle.xml">
+          <Update xpath="/configuration/Random">$(TEMP)</Update>
+        </XML>
+        <XML source="test.xml" destination="variablesubmultiple.xml">
+          <Update xpath="/configuration/Random">$(TEMP)$(windir)</Update>
+        </XML>
+        <XML source="test.xml" destination="variablesubinterspersed.xml">
+          <Update xpath="/configuration/Random">$(TEMP)blah$(windir)</Update>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="copy" >
+      <TargetFiles>
+        <XML source="test.ns.xml" />
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="copy2" >
+      <TargetFiles>
+        <XML source="test.ns.xml" />
+      </TargetFiles>
+    </Configuration>
+    
+    <Configuration Name="inputdirectory" >
+      <TargetFiles>
+        <XML source="test.xml" destination="test.xml" />
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="preservestructure" >
+      <TargetFiles>
+        <XML source="testfiles\\test.xml" destination="test.xml" />
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="config" Depends="variablesubstitution, MultipleDependencies">
+      <TargetFiles>
+        <INI source="test.ini">
+          <Update section="Logging" key="File Name">$(TEMP)</Update>
+          <Update section="Logging" key="Expansion1">$(TEMP)$(windir)</Update>
+          <Update section="Logging" key="Expansion2">$(TEMP)blah$(windir)</Update>
+        </INI>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="MultipleDependencies" Depends="Child1, Child2"/>
+
+    <Configuration Name="Child1" Depends="Child3">
+      <TargetFiles>
+        <XML source="test.xml" destination="multipledependencies.xml">
+          <Update xpath="/configuration/Random">Child1</Update>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="Child2">
+      <TargetFiles>
+        <XML source="test.xml" destination="multipledependencies.xml">
+          <Update xpath="/configuration/Random">Child2</Update>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="Child3">
+      <TargetFiles>
+        <XML source="test.xml" destination="multipledependencies.xml">
+          <Update xpath="/configuration/Random">Child3</Update>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+  </Configurations>
+</RenderConfig>

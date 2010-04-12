@@ -1,0 +1,12 @@
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup/>
+  <ItemGroup/>
+
+  <UsingTask TaskName="RenderConfig.MSBuild.RenderConfig" AssemblyFile="MSBuild.RenderConfig.dll"/>
+  <Target Name="Test">
+
+    <RenderConfig ConfigFile="test.config.xml" Configuration="All" OutputDirectory=".\testing" />
+  </Target>
+  <!-- ================================================================ -->
+
+</Project>
