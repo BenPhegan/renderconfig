@@ -1,0 +1,8 @@
+﻿<Configuration Name="xmlupdate">
+  <TargetFiles>
+    <XML source="test.xml" destination="xmlupdate.xml">
+      <Update xpath="/configuration/nhibernate/add[@key='hibernate.dialect']/@value">xmlupdate</Update>
+      <Update xpath="/configuration/Random">xmlupdate</Update>
+    </XML>
+  </TargetFiles>
+</Configuration>
