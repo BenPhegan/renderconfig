@@ -117,6 +117,12 @@
     <Content Include="Examples\config.xml.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Examples\config.include.full.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Examples\config.include.full.configuration.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Examples\msbuild.project.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

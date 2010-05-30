@@ -1,0 +1,10 @@
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  <Includes/>
+  <Configurations>
+    <Configuration Name="included">
+      <TargetFiles>
+        <XML source="test.xml" destination="included.xml"/>
+      </TargetFiles>
+    </Configuration>
+  </Configurations>
+</RenderConfig>

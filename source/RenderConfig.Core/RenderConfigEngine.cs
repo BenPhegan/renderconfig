@@ -304,6 +304,7 @@ namespace RenderConfig.Core
                 }
             }
 
+            log.LogMessage("Completed loading configuration files.");
             log.LogMessage("Found " + configs.Configurations.Count + " configurations...");
             return configs;
         }
@@ -333,9 +334,10 @@ namespace RenderConfig.Core
                     {
                         XmlDocument includeXml = new XmlDocument();
                         includeXml.Load(includeFile);
-                        XmlNodeList nodes = includeXml.SelectNodes(@"/Configuration");
+                        XmlNodeList nodes = includeXml.SelectNodes(@"//Configuration");
                         if (nodes.Count > 0)
                         {
+                            log.LogMessage(string.Concat(include.file, " contained ",nodes.Count," Configuration Nodes"));
                             foreach (XmlNode node in nodes)
                             {
                                 using (XmlReader nodeReader = XmlReader.Create(new StringReader(node.OuterXml.ToString())))
@@ -343,6 +345,10 @@ namespace RenderConfig.Core
                                     configs.Configurations.Add((Configuration)configSerializer.Deserialize(nodeReader));
                                 }
                             }
+                        }
+                        else
+                        {
+                            log.LogError(string.Concat("Could not find any Configuration nodes in ",include.file));
                         }
                     }
                     catch (ApplicationException i)

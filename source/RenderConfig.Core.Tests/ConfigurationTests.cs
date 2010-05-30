@@ -200,7 +200,7 @@ namespace RenderConfig.Core.Tests
         }
 
         [Test]
-        public void IncludedFilesAvailable()
+        public void IncludedSnippetFilesAvailable()
         {
             string dir = String.Concat("testing", Path.DirectorySeparatorChar, "Included");
             config.ConfigFile = String.Concat("examples", Path.DirectorySeparatorChar, "config.include.xml");
@@ -211,6 +211,20 @@ namespace RenderConfig.Core.Tests
             engine.Render();
             
             Assert.True(File.Exists(String.Concat(dir,Path.DirectorySeparatorChar,"included.xml")));
+        }
+
+        [Test]
+        public void IncludedFullFilesAvailable()
+        {
+            string dir = String.Concat("testing", Path.DirectorySeparatorChar, "FullIncluded");
+            config.ConfigFile = String.Concat("examples", Path.DirectorySeparatorChar, "config.include.full.xml");
+            config.Configuration = "included";
+            config.OutputDirectory = dir;
+            config.BreakOnNoMatch = false;
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+
+            Assert.True(File.Exists(String.Concat(dir, Path.DirectorySeparatorChar, "included.xml")));
         }
 
         [Test]
