@@ -9,5 +9,6 @@
     <add key="hibernate.dialect" value="NHibernate.Dialect.MsSql2000Dialect" />
     <add key="hibernate.connection.driver_class" value="NHibernate.Driver.SqlClientDriver" />
     <add key="hibernate.connection.connection_string" value="Server=localhost;initial catalog=nhibernate;Integrated Security=SSPI" />
+    <add key="test/value" value="whatever, its the forward slash we are testing" />
   </nhibernate>
 </configuration>

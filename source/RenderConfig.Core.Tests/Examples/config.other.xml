@@ -3,13 +3,13 @@
     <Configuration Name="variablesubstitution">
       <TargetFiles>
         <XML source="test.xml" destination="variablesubsingle.xml">
-          <Update xpath="/configuration/Random">$(TEMP)</Update>
+          <Update xpath="/configuration/Random">$(RenderTestVar1)</Update>
         </XML>
         <XML source="test.xml" destination="variablesubmultiple.xml">
-          <Update xpath="/configuration/Random">$(TEMP)$(windir)</Update>
+          <Update xpath="/configuration/Random">$(RenderTestVar1)$(RenderTestVar2)</Update>
         </XML>
         <XML source="test.xml" destination="variablesubinterspersed.xml">
-          <Update xpath="/configuration/Random">$(TEMP)blah$(windir)</Update>
+          <Update xpath="/configuration/Random">$(RenderTestVar1)blah$(RenderTestVar2)</Update>
         </XML>
       </TargetFiles>
     </Configuration>
@@ -35,9 +35,9 @@
     <Configuration Name="config" Depends="variablesubstitution, MultipleDependencies">
       <TargetFiles>
         <INI source="test.ini">
-          <Update section="Logging" key="File Name">$(TEMP)</Update>
-          <Update section="Logging" key="Expansion1">$(TEMP)$(windir)</Update>
-          <Update section="Logging" key="Expansion2">$(TEMP)blah$(windir)</Update>
+          <Update section="Logging" key="File Name">$(RenderTestVar1)</Update>
+          <Update section="Logging" key="Expansion1">$(RenderTestVar1)$(RenderTestVar2)</Update>
+          <Update section="Logging" key="Expansion2">$(RenderTestVar1)blah$(RenderTestVar2)</Update>
         </INI>
       </TargetFiles>
     </Configuration>

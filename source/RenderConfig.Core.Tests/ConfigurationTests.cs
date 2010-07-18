@@ -60,7 +60,7 @@ namespace RenderConfig.Core.Tests
 
             XmlDocument doc = new XmlDocument();
             doc.Load(Path.Combine(od.FullName, "variablesubsingle.xml"));
-            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, Environment.GetEnvironmentVariable("TEMP"));
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, Environment.GetEnvironmentVariable("RenderTestVar1"));
         }
 
         [Test]
@@ -82,34 +82,39 @@ namespace RenderConfig.Core.Tests
             engine.Render(); 
             XmlDocument doc = new XmlDocument();
             doc.Load(Path.Combine(od.FullName, "variablesubmultiple.xml"));
-            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("TEMP"), string.Concat(Environment.GetEnvironmentVariable("windir"))));
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("RenderTestVar1"), string.Concat(Environment.GetEnvironmentVariable("RenderTestVar2"))));
         }
         [Test]
         public void CheckXMLMultipleVariableSubstitutionInterspersed()
         {
-            engine = new RenderConfigEngine(config, log);
+			Environment.SetEnvironmentVariable("RenderTestVar1", "EnvVarBlah1");
+			Environment.SetEnvironmentVariable("RenderTestVar2", "EnvVarBlah2");
+			engine = new RenderConfigEngine(config, log);
             engine.Render();
             XmlDocument doc = new XmlDocument();
             doc.Load(Path.Combine(od.FullName, "variablesubinterspersed.xml"));
-            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("TEMP"), "blah",Environment.GetEnvironmentVariable("windir")));
+            Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText, string.Concat(Environment.GetEnvironmentVariable("RenderTestVar1"), "blah",Environment.GetEnvironmentVariable("RenderTestVar2")));
         }
 
         [Test]
         public void CheckINISingleVariableSubstitution()
         {
+			Environment.SetEnvironmentVariable("RenderTestVar1", "EnvVarBlah");
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
-            Assert.AreEqual(ini.Configs["Logging"].Get("File Name"), Environment.GetEnvironmentVariable("TEMP"));
+            Assert.AreEqual(ini.Configs["Logging"].Get("File Name"), Environment.GetEnvironmentVariable("RenderTestVar1"));
         }
 
         [Test]
         public void CheckINIMultipleVariableSubstitution()
         {
+			Environment.SetEnvironmentVariable("RenderTestVar1", "EnvVarBlah1");
+			Environment.SetEnvironmentVariable("RenderTestVar2", "EnvVarBlah2");
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
-            Assert.AreEqual(ini.Configs["Logging"].Get("Expansion1"), string.Concat(Environment.GetEnvironmentVariable("TEMP"), string.Concat(Environment.GetEnvironmentVariable("windir"))));
+            Assert.AreEqual(ini.Configs["Logging"].Get("Expansion1"), string.Concat(Environment.GetEnvironmentVariable("RenderTestVar1"), string.Concat(Environment.GetEnvironmentVariable("RenderTestVar2"))));
         }
         [Test]
         public void CheckINIMultipleVariableSubstitutionInterspersed()
@@ -117,7 +122,7 @@ namespace RenderConfig.Core.Tests
             engine = new RenderConfigEngine(config, log);
             engine.Render();
             IConfigSource ini = new IniConfigSource(Path.Combine(od.FullName, "test.ini"));
-            Assert.AreEqual(ini.Configs["Logging"].Get("Expansion2"), string.Concat(Environment.GetEnvironmentVariable("TEMP"), "blah", Environment.GetEnvironmentVariable("windir")));
+            Assert.AreEqual(ini.Configs["Logging"].Get("Expansion2"), string.Concat(Environment.GetEnvironmentVariable("RenderTestVar1"), "blah", Environment.GetEnvironmentVariable("RenderTestVar2")));
         }
 
         [Test]
