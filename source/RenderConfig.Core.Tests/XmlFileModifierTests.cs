@@ -301,6 +301,17 @@ namespace RenderConfig.Core.Tests
             doc.Load(String.Concat("testing", Path.DirectorySeparatorChar, "variabletest1", Path.DirectorySeparatorChar, "test.xml"));
             Assert.AreEqual(doc.SelectSingleNode("/configuration/Random").InnerText,"variabletest1");
         }
+		
+		[Test]
+        public void CanUseXpathWithForwardSlashData()
+        {
+            config.Configuration = "xpathtest";
+            engine = new RenderConfigEngine(config, log);
+            engine.Render();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(Path.Combine(od.FullName,"xpathtest.ns.xml"));
+            Assert.IsNull(doc.SelectSingleNode("/r:configuration/r:nhibernate/r:add[@key='test/value']", GetManager(doc)));
+        }
 
     }
 
