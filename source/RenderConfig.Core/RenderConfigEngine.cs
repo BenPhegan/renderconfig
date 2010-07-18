@@ -421,6 +421,20 @@ namespace RenderConfig.Core
             return source;
         }
 
+		public static int CharacterCountInString(string stringValue, char character)
+		{
+			int returnVal = 0;
+			foreach (char c in stringValue)
+			{
+				if (c == character)
+				{
+					returnVal++;
+				}
+			}
+			
+			return returnVal;
+		}
+		
         /// <summary>
         /// Regs the ex parse and replace string.
         /// </summary>

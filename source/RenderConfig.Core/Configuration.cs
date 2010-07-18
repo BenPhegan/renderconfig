@@ -98,6 +98,46 @@ namespace RenderConfig.Core
             return returnCode;
         }
 
+		static string CleansePlatformSpecificDirectoryMarkers(string filename)
+		{
+			char right = Path.DirectorySeparatorChar;
+			char wrong;
+			string returnString = string.Empty;
+			
+			if (right == '\\')
+			{
+				wrong = '/';
+			}
+			else
+			{
+				wrong = '\\';
+			}
+			
+			filename = filename.Replace(wrong.ToString(), right.ToString());
+			returnString = RemoveAdjacentDuplicateCharacters(filename, right);
+			
+			return returnString;
+			
+		}
+			    
+		static string RemoveAdjacentDuplicateCharacters(string text, char character)
+		{
+			string returnString = string.Empty;
+			for (int x = 0; x < text.Length; x++)
+			{
+				if (x+1 < text.Length)
+				{
+					if (text[x] == character && text[x+1] == character)
+					{
+						x = x + 1;
+					}
+				}
+				returnString = string.Concat(returnString, text[x]);
+			}
+						
+			return returnString;		
+		}
+		
         /// <summary>
         /// Check and modify source and destination file based on input and output directory existence, and a set of configuration values
         /// </summary>
@@ -106,7 +146,8 @@ namespace RenderConfig.Core
         private void CheckAndModifySourceAndDestination(RenderConfigConfig config, ITargetFile file)
         {
             //Check to see if we want to preserve the directory structure....
-            FileInfo t = new FileInfo(file.source);
+            file.source = CleansePlatformSpecificDirectoryMarkers(file.source);
+			FileInfo t = new FileInfo(file.source);
             if (config.PreserveSourceStructure)
             {
                  if (file.destination == null)
