@@ -25,6 +25,7 @@
 using System;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace RenderConfig.Core
 {
@@ -274,6 +275,55 @@ namespace RenderConfig.Core
             }
         }
 
+		/// <summary>
+		/// Splits an XPath so that we can look to add a namespace.  Although the method says intelligently, it wont be until someone rewrites this drivel.  Tests pass though. 
+		/// </summary>
+		/// <param name="xpath">
+		/// A <see cref="System.String"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.String[]"/>
+		/// </returns>
+		static string[] SplitXPathIntelligently (string xpath)
+		{
+			//First we split the string, then looked for unmatched quotes
+			string[] firstParse = xpath.Split('/');
+			List<string> returnList = new List<string>();
+			Boolean inTextBlock = false;
+			string concat = string.Empty;
+			
+			foreach (string s in firstParse)
+			{
+				string varS = s;
+				
+				//If we find an unmatched set of quotes, we have to look at contatenating the preceding strings...
+				if (varS.Contains("\'") && RenderConfigEngine.CharacterCountInString(varS, '\'') != 2)
+				{
+					if (!inTextBlock)
+					{
+						concat = string.Empty;
+						inTextBlock = true;
+					}
+					else
+					{
+						varS = string.Concat(concat, "/", varS);						
+						inTextBlock = false;
+					}
+				}
+				
+				if (inTextBlock)
+				{
+					concat = string.Concat(concat, varS);
+				}
+				else
+				{
+					returnList.Add(varS);
+				}
+			}
+			
+			return returnList.ToArray();					
+		}
+
         /// <summary>
         /// Checks and modifies the XPath namespace.
         /// </summary>
@@ -285,7 +335,7 @@ namespace RenderConfig.Core
             if (manager.HasNamespace("r"))
             {
                 string newXpath = string.Empty;
-                string[] xpathArray = xpath.Split('/');
+                string[] xpathArray = SplitXPathIntelligently(xpath);
 
                 foreach (string s in xpathArray)
                 {

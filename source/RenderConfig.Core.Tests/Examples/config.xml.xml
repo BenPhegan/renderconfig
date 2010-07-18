@@ -13,6 +13,14 @@
       </TargetFiles>
     </Configuration>
 
+    <Configuration Name="xpathtest">
+      <TargetFiles>
+        <XML source="test.ns.xml" destination="xpathtest.ns.xml">
+          <Delete xpath="/configuration/nhibernate/add[@key='test/value']"/>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+    
     <Configuration Name="xmlfilemodifier" Depends="xmladd, xmladdns, xmldelete, xmldeletens, xmlupdate, xmlupdatens"/>
 
     <Configuration Name="xmladdns">

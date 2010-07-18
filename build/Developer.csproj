@@ -1,18 +1,32 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectGuid>{BC8905CE-6485-4a82-9EA6-F200803C0653}</ProjectGuid>
-    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Developer</RootNamespace>
+    <AssemblyName>Developer</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\Build.$(Configuration)</OutputPath>
+    <DebugType>none</DebugType>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\Build.$(Configuration)</OutputPath>
+    <DebugType>none</DebugType>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(CCNetWorkingDirectory)'==''">
@@ -27,10 +41,11 @@
     </Otherwise>
   </Choose>
   <Target Name="Build">
-	<Delete Files="..\GlobalAssemblyInfo.cs" />
-  	<Copy SourceFiles=".\config\GlobalAssemblyInfo.cs" DestinationFolder=".." Condition="$(LocalBuild)=='true'"/>
+    <Delete Files="..\GlobalAssemblyInfo.cs" />
+    <Copy SourceFiles=".\config\GlobalAssemblyInfo.cs" DestinationFolder=".." Condition="$(LocalBuild)=='true'" />
   </Target>
   <Target Name="Rebuild" DependsOnTargets="Build" />
   <Target Name="Clean">
   </Target>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
