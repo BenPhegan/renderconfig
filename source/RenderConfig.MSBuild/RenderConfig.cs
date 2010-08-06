@@ -42,8 +42,18 @@ namespace RenderConfig.MSBuild
         private Boolean breakOnNoMatch = false;
         private string inputDirectory;
         private Boolean preserveSourceStructure = false;
+		private Boolean subDirectoryEachConfiguration = false;
 
-        /// <summary>
+		/// <summary>
+		/// Gets or sets a value indicating whether a subdirectory will be created for each configuration rendered. 
+		/// </summary>
+		public Boolean SubDirectoryEachConfiguration 
+		{
+			get {	return this.subDirectoryEachConfiguration;}
+			set {	subDirectoryEachConfiguration = value;}
+		}
+		
+		/// <summary>
         /// Gets or sets a value indicating whether [preserve source structure] when creating the target files.
         /// </summary>
         /// <value>
@@ -92,7 +102,6 @@ namespace RenderConfig.MSBuild
         /// Gets or sets the config output directory.
         /// </summary>
         /// <value>The config directory.</value>
-        [Required]
         public string OutputDirectory
         {
             get { return outputDirectory; }
@@ -146,6 +155,8 @@ namespace RenderConfig.MSBuild
             config.DeleteOutputDirectory = deleteOutputDirectory;
             config.OutputDirectory = outputDirectory;
             config.InputDirectory = inputDirectory;
+			config.SubDirectoryEachConfiguration = SubDirectoryEachConfiguration;
+			config.PreserveSourceStructure = PreserveSourceStructure;
 
             IRenderConfigLogger log = new MSBuildLogger(Log);
             

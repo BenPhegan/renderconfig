@@ -98,9 +98,9 @@ namespace RenderConfig.Console
             }
 
             //HACK This is not right, shouldnt NDesk.Options be hanlding this shit????
-            if (config.OutputDirectory == null)
+            if (config.OutputDirectory == null && !config.SubDirectoryEachConfiguration)
             {
-                OutputArgumentError(options, "Please provide an output directory");
+                OutputArgumentError(options, "Please provide either an output directory or specify -s for a subdirectory per configuration");
             }
 
             if (config.Configuration == null)

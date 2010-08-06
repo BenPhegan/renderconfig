@@ -614,7 +614,18 @@ namespace RenderConfig.Core
             }
             else
             {
-                //TODO May need to allow people to actually override and use the config.SubDirectoryEachConfiguration for individual configs
+				if (config.SubDirectoryEachConfiguration)
+				{
+					if (!String.IsNullOrEmpty(config.OutputDirectory))
+					{
+						config.OutputDirectory = Path.Combine(config.OutputDirectory, config.Configuration);
+					}
+					else
+					{
+						config.OutputDirectory = config.Configuration;
+					}
+				}
+
                 RenderConfigEngine engine = new RenderConfigEngine(config, log);
                 return engine.Render();
             }

@@ -48,6 +48,7 @@ namespace RenderConfig.Core
             log.LogMessage(string.Concat("Break On No Match = ".PadLeft(30) + config.BreakOnNoMatch));
             log.LogMessage(string.Concat("Clean XML Output = ".PadLeft(30) + config.CleanOutput));
             log.LogMessage(string.Concat("Preserve Source Structure = ".PadLeft(30) + config.PreserveSourceStructure));
+            log.LogMessage(string.Concat("Subdirectory per Config = ".PadLeft(30) + config.SubDirectoryEachConfiguration));
             log.LogMessage("--------------------------------------------------------");
         }
         
