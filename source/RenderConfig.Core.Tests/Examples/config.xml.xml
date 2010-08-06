@@ -1,0 +1,111 @@
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  <Includes>
+    <Include file="config.entity.configuration.xml"/>
+  </Includes>
+  <Configurations>
+    <Configuration Name="xmldeletens">
+      <TargetFiles>
+        <XML source="test.ns.xml" destination="xmldelete.ns.xml">
+          <Delete xpath="/configuration/nhibernate/add[@key='hibernate.dialect']"/>
+          <Delete xpath="/configuration/nhibernate/add[@key='hibernate.connection.driver_class']/@value"/>
+          <Delete xpath="/configuration/configSections/section"/>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="xpathtest">
+      <TargetFiles>
+        <XML source="test.ns.xml" destination="xpathtest.ns.xml">
+          <Delete xpath="/configuration/nhibernate/add[@key='test/value']"/>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+    
+    <Configuration Name="xmlfilemodifier" Depends="xmladd, xmladdns, xmldelete, xmldeletens, xmlupdate, xmlupdatens"/>
+
+    <Configuration Name="xmladdns">
+      <TargetFiles>
+        <XML source="test.ns.xml" destination="xmladd.ns.xml">
+          <Add attribute="value" xpath="/configuration/configSections/section">xmladd</Add>
+          <Add xpath="/configuration/nhibernate"><![CDATA[<Node><Test>xmladd</Test></Node>]]></Add>
+          <Add xpath="/configuration/nhibernate">SimpleNode</Add>
+          <Add attribute="random" xpath="/configuration/nhibernate/add[@key='hibernate.dialect']">xmladd</Add>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="xmldelete">
+      <TargetFiles>
+        <XML source="test.xml" destination="xmldelete.xml">
+          <Delete xpath="/configuration/nhibernate/add[@key='hibernate.dialect']"/>
+          <Delete xpath="/configuration/nhibernate/add[@key='hibernate.connection.driver_class']/@value"/>
+          <Delete xpath="/configuration/configSections/section"/>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="xmlreplacebad">
+      <TargetFiles>
+        <XML source="test.xml" destination="xmlreplace.xml">
+          <Replace regex="/>">></Replace>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="xmladd">
+      <TargetFiles>
+        <XML source="test.xml" destination="xmladd.xml">
+          <Add attribute="value" xpath="/configuration/configSections/section">xmladd</Add>
+          <Add xpath="/configuration/nhibernate"><![CDATA[<Node><Test>xmladd</Test></Node>]]></Add>
+          <Add xpath="/configuration/nhibernate">SimpleNode</Add>
+          <Add attribute="random" xpath="/configuration/nhibernate/add[@key='hibernate.dialect']">xmladd</Add>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="xmlreplace">
+      <TargetFiles>
+        <XML source="test.ns.xml" destination="xmlreplace.ns.xml">
+          <Replace regex="Random">ReplacementRandom</Replace>
+        </XML>
+        <XML source="test.xml" destination="xmlreplace.xml">
+          <Replace regex="Random">ReplacementRandom</Replace>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="xmlupdatens">
+      <TargetFiles>
+        <XML source="test.ns.xml" destination="xmlupdate.ns.xml">
+          <Update xpath="/configuration/nhibernate/add[@key='hibernate.dialect']/@value">xmlupdate</Update>
+          <Update xpath="/configuration/Random">xmlupdate</Update>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="variables">
+      <!-- The environment variable below will only get used if Variables is not used as a dependency which also defines this variable-->
+      <EnvironmentVariables>
+        <EnvironmentVariable variable="VariableSetting">variables</EnvironmentVariable>
+      </EnvironmentVariables>
+      <TargetFiles>
+        <XML source="test.xml">
+          <Update xpath="/configuration/Random">$(VariableSetting)</Update>
+        </XML>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="variabletest1" Depends="variables">
+      <EnvironmentVariables>
+        <EnvironmentVariable variable="VariableSetting">variabletest1</EnvironmentVariable>
+      </EnvironmentVariables>
+    </Configuration>
+
+    <Configuration Name="variabletest2" Depends="variables">
+      <EnvironmentVariables>
+        <EnvironmentVariable variable="VariableSetting">variabletest2</EnvironmentVariable>
+      </EnvironmentVariables>
+    </Configuration>
+    
+  </Configurations>
+</RenderConfig>

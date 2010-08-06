@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderConfig.MSBuild", "source\RenderConfig.MSBuild\RenderConfig.MSBuild.csproj", "{14D4C9A8-5EEA-42A7-9CFF-40227474622A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{83314AA8-50E6-43B5-9317-CF3F3358B4D4} = {83314AA8-50E6-43B5-9317-CF3F3358B4D4}
+		{BC8905CE-6485-4A82-9EA6-F200803C0653} = {BC8905CE-6485-4A82-9EA6-F200803C0653}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Developer", "build\Developer.csproj", "{BC8905CE-6485-4a82-9EA6-F200803C0653}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderConfig.Core.Tests", "source\RenderConfig.Core.Tests\RenderConfig.Core.Tests.csproj", "{83314AA8-50E6-43B5-9317-CF3F3358B4D4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC8905CE-6485-4A82-9EA6-F200803C0653} = {BC8905CE-6485-4A82-9EA6-F200803C0653}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSearch", "source\GraphSearch\GraphSearch.csproj", "{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC8905CE-6485-4A82-9EA6-F200803C0653} = {BC8905CE-6485-4A82-9EA6-F200803C0653}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphSearch.Tests", "source\GraphSearch.Tests\GraphSearch.Tests.csproj", "{8700EF0E-96C3-40A0-8763-23059B0C84E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC8905CE-6485-4A82-9EA6-F200803C0653} = {BC8905CE-6485-4A82-9EA6-F200803C0653}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderConfig.Console", "source\RenderConfig.Console\RenderConfig.Console.csproj", "{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC8905CE-6485-4A82-9EA6-F200803C0653} = {BC8905CE-6485-4A82-9EA6-F200803C0653}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderConfig.Core", "source\RenderConfig.Core\RenderConfig.Core.csproj", "{E262070A-8113-490B-A345-B2A8D73149B0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8700EF0E-96C3-40A0-8763-23059B0C84E6} = {8700EF0E-96C3-40A0-8763-23059B0C84E6}
+		{BC8905CE-6485-4A82-9EA6-F200803C0653} = {BC8905CE-6485-4A82-9EA6-F200803C0653}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14D4C9A8-5EEA-42A7-9CFF-40227474622A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D4C9A8-5EEA-42A7-9CFF-40227474622A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D4C9A8-5EEA-42A7-9CFF-40227474622A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D4C9A8-5EEA-42A7-9CFF-40227474622A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83314AA8-50E6-43B5-9317-CF3F3358B4D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83314AA8-50E6-43B5-9317-CF3F3358B4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83314AA8-50E6-43B5-9317-CF3F3358B4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83314AA8-50E6-43B5-9317-CF3F3358B4D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8700EF0E-96C3-40A0-8763-23059B0C84E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8700EF0E-96C3-40A0-8763-23059B0C84E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8700EF0E-96C3-40A0-8763-23059B0C84E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8700EF0E-96C3-40A0-8763-23059B0C84E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC8905CE-6485-4a82-9EA6-F200803C0653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC8905CE-6485-4a82-9EA6-F200803C0653}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC8905CE-6485-4a82-9EA6-F200803C0653}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC8905CE-6485-4a82-9EA6-F200803C0653}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E262070A-8113-490B-A345-B2A8D73149B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E262070A-8113-490B-A345-B2A8D73149B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E262070A-8113-490B-A345-B2A8D73149B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E262070A-8113-490B-A345-B2A8D73149B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = source\RenderConfig.Console\RenderConfig.Console.csproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,41 @@
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  <Configurations>
+    <Configuration Name="inifilemodifier" >
+      <TargetFiles>
+        <INI source="test.ini" destination="original.ini"/>
+        <INI source="test.ini" >
+          <Add section="Logging" key="CommonSetting">Value for common setting</Add>
+          <Delete section="Logging" key="MessageColumns"/>
+          <Update section="Logging" key="MaxFileSize">69</Update>
+          <Add section="NewSection" key="FromCommon">BLAH!</Add>
+        </INI>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="inireplace" >
+      <TargetFiles>
+        <INI source="test.ini" destination="original.ini" />
+        <INI source="test.ini" >
+          <Replace regex="Expansion">Replacement</Replace>
+        </INI>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="inimissingsection" >
+      <TargetFiles>
+        <INI source="test.ini" >
+          <Update section="Missing" key="MaxFileSize">69</Update>
+        </INI>
+      </TargetFiles>
+    </Configuration>
+
+    <Configuration Name="inimissingkey" >
+      <TargetFiles>
+        <INI source="test.ini" >
+          <Update section="Logging" key="MissingKey">69</Update>
+        </INI>
+      </TargetFiles>
+    </Configuration>
+
+  </Configurations>
+</RenderConfig>

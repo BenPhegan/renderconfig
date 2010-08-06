@@ -1,0 +1,7 @@
+<RenderConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Configuration.xsd">
+  <Includes>
+    <Include file="config.include.configuration.xml"/>
+  </Includes>
+  <Configurations>
+  </Configurations>
+</RenderConfig>
