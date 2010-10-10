@@ -40,6 +40,18 @@ namespace RenderConfig.Core
         private string inputDirectory;
         private Boolean preserveSourceStructure;
         private Boolean subDirectoryEachConfiguration = true;
+        private Boolean stampRenderData = false;
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user wants to stamp a comment into the rendered file.
+        /// </summary>
+        /// <value><c>true</c> if [stamp render data]; otherwise, <c>false</c>.</value>
+        public Boolean StampRenderData
+        {
+            get { return stampRenderData; }
+            set { stampRenderData = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether each configuration passed in should be output to a sub-drectory.

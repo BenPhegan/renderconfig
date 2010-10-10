@@ -40,24 +40,22 @@ namespace RenderConfig.Core
         Boolean returnCode;
         XmlTargetFile file;
         IRenderConfigLogger log;
-        Boolean breakOnNoMatch;
-        Boolean cleanXmlOutput;
+        RenderConfigConfig config;
         string targetFile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlFileModifier"/> class.
         /// </summary>
-        public XmlFileModifier(XmlTargetFile file, string targetFile, IRenderConfigLogger log, Boolean cleanXmlOutput, Boolean breakOnNoMatch)
+        public XmlFileModifier(XmlTargetFile file, string targetFile, IRenderConfigLogger log, RenderConfigConfig config)
         {
             this.file = file;
             this.log = log;
-            this.cleanXmlOutput = cleanXmlOutput;
-            this.breakOnNoMatch = breakOnNoMatch;
+            this.config = config;
             this.targetFile = targetFile;
 
             //Get the document and set up the XmlReaderSettings
             document = new XmlDocument();
-            settings = GetXmlReaderSettings(cleanXmlOutput, document);
+            settings = GetXmlReaderSettings(config.CleanOutput, document);
 
             using (XmlReader xml = XmlReader.Create(targetFile, settings))
             {
@@ -111,8 +109,16 @@ namespace RenderConfig.Core
                 Delete(mod);
             }
                 
+            //TODO: Make sure that we stamp the renderconfig data if required
+            if (true)  //HACK:  THIS NEEDS TO BE TURNED OFF
+            //if (config.StampRenderData)
+            {
+                XmlComment comment = document.CreateComment("Test Comment");
+                document.FirstChild.AppendChild(comment);
+            }
+
             //HACK Why oh why are XmlWriterSettings and XmlReaderSettings SOOO SIMILAR, and yet....
-            XmlWriterSettings writerSettings = GetXmlWriterSettings(cleanXmlOutput, document);
+            XmlWriterSettings writerSettings = GetXmlWriterSettings(config.CleanOutput, document);
             using (XmlWriter writer = XmlWriter.Create(targetFile, writerSettings))
             {
                 document.Save(writer);
@@ -216,7 +222,7 @@ namespace RenderConfig.Core
                 nodes = document.SelectNodes(xpath, nameSpaces);
             }
 
-            LogNodeCount(nodes, breakOnNoMatch);
+            LogNodeCount(nodes, config.BreakOnNoMatch);
 
             return nodes;
         }

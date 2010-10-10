@@ -34,7 +34,7 @@ namespace RenderConfig.Core
         TxtTargetFile file;
         IRenderConfigLogger log;
         string targetFile;
-        Boolean breakOnNoMatch;
+        RenderConfigConfig config;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TxtFileModifier"/> class.
@@ -43,12 +43,12 @@ namespace RenderConfig.Core
         /// <param name="targetFile">The target file.</param>
         /// <param name="log">The log.</param>
         /// <param name="breakOnNoMatch">if set to <c>true</c> [break on no match].</param>
-        public TxtFileModifier(TxtTargetFile file, string targetFile, IRenderConfigLogger log, Boolean breakOnNoMatch)
+        public TxtFileModifier(TxtTargetFile file, string targetFile, IRenderConfigLogger log, RenderConfigConfig config)
         {
             this.log = log;
             this.file = file;
             this.targetFile = targetFile;
-            this.breakOnNoMatch = breakOnNoMatch;
+            this.config = config;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace RenderConfig.Core
                 LogUtilities.LogCount(count,log);
             }
             //TODO
-			if (breakOnNoMatch && count == 0)
+			if (config.BreakOnNoMatch && count == 0)
 			{
 				return false;
 			}
