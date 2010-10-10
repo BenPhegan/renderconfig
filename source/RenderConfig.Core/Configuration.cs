@@ -57,7 +57,7 @@ namespace RenderConfig.Core
                 }
                 else
                 {
-                    IFileModifier fileModifier = new XmlFileModifier(file, RenderConfigEngine.ResolveAndCopyDestinationFilename(file, config.OutputDirectory, true), log, config.CleanOutput, config.BreakOnNoMatch);
+                    IFileModifier fileModifier = new XmlFileModifier(file, RenderConfigEngine.ResolveAndCopyDestinationFilename(file, config.OutputDirectory, true), log, config);
                     fileModifier.Run();
                 }
             }
@@ -74,7 +74,7 @@ namespace RenderConfig.Core
                 }
                 else
                 {
-                    IFileModifier fileModifier = new IniFileModifier(file, RenderConfigEngine.ResolveAndCopyDestinationFilename(file, config.OutputDirectory, true), log, config.BreakOnNoMatch);
+                    IFileModifier fileModifier = new IniFileModifier(file, RenderConfigEngine.ResolveAndCopyDestinationFilename(file, config.OutputDirectory, true), log, config);
                     fileModifier.Run();
                 }
             }
@@ -90,7 +90,7 @@ namespace RenderConfig.Core
                 }
                 else
                 {
-                    IFileModifier fileModifier = new TxtFileModifier(file, RenderConfigEngine.ResolveAndCopyDestinationFilename(file, config.OutputDirectory, true), log, config.BreakOnNoMatch);
+                    IFileModifier fileModifier = new TxtFileModifier(file, RenderConfigEngine.ResolveAndCopyDestinationFilename(file, config.OutputDirectory, true), log, config);
                     fileModifier.Run();
                 }
             }
