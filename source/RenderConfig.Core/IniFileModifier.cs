@@ -36,7 +36,7 @@ namespace RenderConfig.Core
         IniTargetFile file;
         string targetFile;
         IRenderConfigLogger log;
-        Boolean breakOnNoMatch;
+        RenderConfigConfig config;
 
 
         /// <summary>
@@ -46,11 +46,11 @@ namespace RenderConfig.Core
         /// <param name="targetFile">The target file.</param>
         /// <param name="log">The log.</param>
         /// <param name="breakOnNoMatch">if set to <c>true</c> [break on no match].</param>
-        public IniFileModifier(IniTargetFile file, string targetFile, IRenderConfigLogger log, Boolean breakOnNoMatch)
+        public IniFileModifier(IniTargetFile file, string targetFile, IRenderConfigLogger log, RenderConfigConfig config)
         {
             this.file = file;
             this.log = log;
-            this.breakOnNoMatch = breakOnNoMatch;
+            this.config = config;
             this.targetFile = targetFile;
         }
 
@@ -60,7 +60,10 @@ namespace RenderConfig.Core
         /// <returns></returns>
         public bool Run()
         {
-
+            if (config.StampRenderData)
+            {
+                //TODO:  Nini doesnt seem to do comments for us, need to do this by hand.
+            }
             //Add them in a specific order
             foreach (IniAdd mod in file.Add)
             {
@@ -136,7 +139,7 @@ namespace RenderConfig.Core
                 }
 
                 //If we want to break on no match, check
-                if (breakOnNoMatch && type == "Update" && !target.Configs[section].Contains(key))
+                if (config.BreakOnNoMatch && type == "Update" && !target.Configs[section].Contains(key))
                 {
                     throw new Exception("Could not match section");
                 }
@@ -170,7 +173,7 @@ namespace RenderConfig.Core
             {
                 IConfigSource target = new IniConfigSource(targetFile);
 
-                if (breakOnNoMatch && !target.Configs[mod.section].Contains(mod.key))
+                if (config.BreakOnNoMatch && !target.Configs[mod.section].Contains(mod.key))
                 {
                     throw new Exception("Could not match section");
                 }
