@@ -380,17 +380,13 @@ namespace RenderConfig.Core
         /// <param name="breakOnNoMatch">if set to <c>true</c> [break on no match].</param>
         private void LogNodeCount(XmlNodeList nodes, Boolean breakOnNoMatch)
         {
-            if (nodes.Count > 0)
+        
+            LogUtilities.LogCount(nodes.Count, log);
+            if (breakOnNoMatch)
             {
-                LogUtilities.LogCount(nodes.Count, log);
+                throw new Exception("Could not find match");
             }
-            else
-            {
-                if (breakOnNoMatch)
-                {
-                    throw new Exception("Could not find match");
-                }
-            }
+        
         }
 
         /// <summary>
