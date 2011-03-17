@@ -47,9 +47,9 @@ namespace RenderConfig.Console
             RenderConfigConfig config = new RenderConfigConfig();
             config.DeleteOutputDirectory = false;
             config.CleanOutput = false;
-            config.BreakOnNoMatch = true;
+            config.BreakOnNoMatch = false;
             config.PreserveSourceStructure = false;
-            config.SubDirectoryEachConfiguration = true;
+            config.SubDirectoryEachConfiguration = false;
 
             OptionSet options = null;
 

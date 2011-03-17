@@ -90,7 +90,15 @@ namespace RenderConfig.Core
         /// <param name="log">The log.</param>
         public static void LogCount(int count, IRenderConfigLogger log)
         {
-            log.LogMessage("COUNT = ".PadLeft(27) + count);
+            if (count == 0)
+            {
+                log.LogMessage(MessageImportance.High,"COUNT = ".PadLeft(27) + count);
+            }
+            else
+            {
+                log.LogMessage("COUNT = ".PadLeft(27) + count);
+            }
+            
             log.LogMessage("");
         }
 
