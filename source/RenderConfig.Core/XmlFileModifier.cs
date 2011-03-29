@@ -110,8 +110,7 @@ namespace RenderConfig.Core
             }
                 
             //TODO: Make sure that we stamp the renderconfig data if required
-            if (true)  //HACK:  THIS NEEDS TO BE TURNED OFF
-            //if (config.StampRenderData)
+            if (config.StampRenderData)
             {
                 XmlComment comment = document.CreateComment("Test Comment");
                 document.FirstChild.AppendChild(comment);
