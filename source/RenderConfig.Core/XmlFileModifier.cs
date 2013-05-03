@@ -175,7 +175,7 @@ namespace RenderConfig.Core
             }
             catch (Exception i)
             {
-                throw new Exception("Failed to process update modification to xpath = " + mod.xpath, i);
+                LogFailureAndOptionallyThrow(mod.xpath, "update", i);
             }
         }
 
@@ -206,7 +206,6 @@ namespace RenderConfig.Core
         /// <summary>
         /// Returns the matching nodes.
         /// </summary>
-        /// <param name="modification">The modification.</param>
         /// <returns></returns>
         private XmlNodeList ReturnMatchingNodes(string xpath)
         {
@@ -253,8 +252,17 @@ namespace RenderConfig.Core
             }
             catch (Exception i)
             {
-                throw new Exception("Failed to process delete modification to xpath = " + mod.xpath, i);
+                LogFailureAndOptionallyThrow(mod.xpath, "delete", i);
             }
+        }
+
+        private void LogFailureAndOptionallyThrow(string xpath, string updateType, Exception exception)
+        {
+            var message = string.Format("Failed to process {0} modification to xpath = {1} : {2}", updateType, xpath, exception);
+            if (config.BreakOnNoMatch)
+                throw new Exception(message, exception);
+
+            log.LogError(MessageImportance.High,message);
         }
 
         /// <summary>
@@ -276,20 +284,22 @@ namespace RenderConfig.Core
             }
             catch (Exception i)
             {
-                throw new Exception("Failed to process update modification to xpath = " + mod.xpath, i);
+                this.LogFailureAndOptionallyThrow(mod.xpath,"update", i);
             }
         }
 
-		/// <summary>
-		/// Splits an XPath so that we can look to add a namespace.  Although the method says intelligently, it wont be until someone rewrites this drivel.  Tests pass though. 
-		/// </summary>
-		/// <param name="xpath">
-		/// A <see cref="System.String"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.String[]"/>
-		/// </returns>
-		static string[] SplitXPathIntelligently (string xpath)
+        /// <summary>
+        /// Splits an XPath so that we can look to add a namespace.  Although the method says intelligently, it wont be until someone rewrites this drivel.  Tests pass though. 
+        /// </summary>
+        /// <param name="xpath">
+        /// A <see cref="System.String"/>
+        /// </param>
+        /// <returns>
+        /// A <see>
+        ///       <cref>System.String[]</cref>
+        ///   </see>
+        /// </returns>
+        static string[] SplitXPathIntelligently (string xpath)
 		{
 			//First we split the string, then looked for unmatched quotes
 			string[] firstParse = xpath.Split('/');

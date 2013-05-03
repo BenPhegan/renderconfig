@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -25,3 +26,13 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
+[assembly: CLSCompliant(false)]
+
+[assembly: ComVisible(false)]
+
+[assembly: AssemblyCompany("Ben Phegan")]
+[assembly: AssemblyProduct("RenderConfig")]
+[assembly: AssemblyCopyright("Â© Copyright 2010 Ben Phega0")]
+[assembly: AssemblyVersion("0.9.*")]
+
+
