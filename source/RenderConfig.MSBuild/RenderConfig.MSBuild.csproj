@@ -60,8 +60,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Nini">
       <HintPath>..\..\external\Nini.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -71,10 +70,6 @@
     <Compile Include="RenderConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphSearch\GraphSearch.csproj">
-      <Project>{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}</Project>
-      <Name>GraphSearch</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RenderConfig.Core\RenderConfig.Core.csproj">
       <Project>{E262070A-8113-490B-A345-B2A8D73149B0}</Project>
       <Name>RenderConfig.Core</Name>
