@@ -71,12 +71,8 @@
     <Compile Include="RenderConfigEngine.cs" />
     <Compile Include="RenderConfigConfig.cs" />
     <Compile Include="XmlFileModifier.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GraphSearch\GraphSearch.csproj">
-      <Project>{9CCBD4F6-06BF-45FD-AB07-A571F4E524D3}</Project>
-      <Name>GraphSearch</Name>
-    </ProjectReference>
+    <Compile Include="DepthFirstSearch.cs" />
+    <Compile Include="Node.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.designer.cs" />
