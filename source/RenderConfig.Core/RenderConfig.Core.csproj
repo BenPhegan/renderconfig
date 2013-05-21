@@ -59,8 +59,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Nini, Version=1.1.0.0, Culture=neutral, PublicKeyToken=691faec150a7fa7b">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Nini">
       <HintPath>..\..\external\Nini.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -134,4 +133,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Content Include="RenderConfig.Core.nuspec">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

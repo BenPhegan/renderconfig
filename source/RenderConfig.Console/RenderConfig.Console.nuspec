@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>RenderConfig.Console</id>
+    <version>$version$</version>
+    <authors>Ben Phegan</authors>
+    <description>Simplified management of enterprise application configuration.</description>
+    <language>en-US</language>
+    <projectUrl>https://code.google.com/p/renderconfig/</projectUrl>
+  </metadata>
+</package>
