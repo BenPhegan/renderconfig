@@ -112,6 +112,6 @@ mkdir $(TargetDir)..\Deploy.$(Configuration)\Examples
 xcopy $(TargetDir)MSBuild.RenderConfig.dll  $(TargetDir)..\Deploy.$(Configuration) /y /i
 xcopy $(TargetDir)Configuration.xsd  $(TargetDir)..\Deploy.$(Configuration) /y /i
 xcopy $(TargetDir)Examples $(TargetDir)..\Deploy.$(Configuration)\Examples /s /e /y</PostBuildEvent>
-    <PreBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\sgen.exe" /a:$(TargetDir)RenderConfig.Core.dll /f</PreBuildEvent>
+    <!--<PreBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\Bin\sgen.exe" /a:$(TargetDir)RenderConfig.Core.dll /f</PreBuildEvent>-->
   </PropertyGroup>
 </Project>
