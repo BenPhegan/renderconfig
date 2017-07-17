@@ -7,9 +7,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderConfig.Console", "source\RenderConfig.Console\RenderConfig.Console.csproj", "{7D0A535E-EAA7-4E10-A2EA-32BB007E7BF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderConfig.Core", "source\RenderConfig.Core\RenderConfig.Core.csproj", "{E262070A-8113-490B-A345-B2A8D73149B0}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8700EF0E-96C3-40A0-8763-23059B0C84E6} = {8700EF0E-96C3-40A0-8763-23059B0C84E6}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

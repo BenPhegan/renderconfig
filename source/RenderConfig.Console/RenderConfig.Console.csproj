@@ -98,7 +98,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"$(SolutionDir)tools\ilmerge\ilmerge" /target:exe /out:"$(TargetDir)RenderConfig.exe" "$(TargetDir)RenderConfig.Console.exe" "$(TargetDir)RenderConfig.Core.XmlSerializers.dll" "$(TargetDir)Nini.dll" "$(TargetDir)RenderConfig.Core.dll"  "$(TargetDir)NDesk.Options.dll"
+    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">"$(SolutionDir)tools\ilmerge\ilmerge" /target:exe /out:"$(TargetDir)RenderConfig.exe" "$(TargetDir)RenderConfig.Console.exe" "$(TargetDir)Nini.dll" "$(TargetDir)RenderConfig.Core.dll"  "$(TargetDir)NDesk.Options.dll"
 mkdir $(TargetDir)..\Deploy.$(Configuration)
 mkdir $(TargetDir)..\Deploy.$(Configuration)\Examples
 xcopy $(TargetDir)RenderConfig.exe  $(TargetDir)..\Deploy.$(Configuration) /y /i
