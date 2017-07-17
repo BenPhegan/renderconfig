@@ -25,4 +25,4 @@ With RenderConfig, at build time you can explicitly produce a set of configurati
   1. Allows use of environment variables in modifications
       1. Environment variables can also be defined within a configuration
 
-For a quick example, see [here](wiki/QuickExample).
+For a quick example, see [here](https://github.com/BenPhegan/renderconfig/wiki/QuickExample).
