@@ -125,6 +125,8 @@ namespace RenderConfig.Core
                     {
                         Environment.SetEnvironmentVariable(variable.variable, variable.Value);
                     }
+                    //Also set a special, ConfigurationName
+                    Environment.SetEnvironmentVariable("RenderConfig.ConfigurationName", varConfig.Name);
                 }
 
                 while (configsToRun.Count > 0)
