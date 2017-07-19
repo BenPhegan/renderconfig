@@ -118,9 +118,14 @@ namespace RenderConfig.Core
 
             //HACK Why oh why are XmlWriterSettings and XmlReaderSettings SOOO SIMILAR, and yet....
             XmlWriterSettings writerSettings = GetXmlWriterSettings(config.CleanOutput, document);
-            using (XmlWriter writer = XmlWriter.Create(targetFile, writerSettings))
+            using (XmlTextWriter writer = new XmlTextWriter(targetFile, System.Text.Encoding.UTF8))
             {
-                document.Save(writer);
+                writer.Formatting = System.Xml.Formatting.Indented; // if you want it indented
+                writer.Indentation = 4;
+                writer.IndentChar = ' ';
+                var tempDoc = new XmlDocument();
+                tempDoc.LoadXml(document.OuterXml.Replace("xmlns=\"\"", ""));
+                tempDoc.Save(writer);
             }
             //HACK BAD
             returnCode = true;
@@ -154,10 +159,9 @@ namespace RenderConfig.Core
 
                             XmlDocumentFragment frag = document.CreateDocumentFragment();
                             frag.InnerXml = mod.Value;
-                            
+
                             XmlNode imported = document.ImportNode(frag, true);
                             node.AppendChild(imported);
-
                             //TODO This does not work as yet....may need 3.0 and XDocument, as this stuff sucks.....
                             //if (tableNode != null)
                             //{
@@ -209,20 +213,63 @@ namespace RenderConfig.Core
         /// <returns></returns>
         private XmlNodeList ReturnMatchingNodes(string xpath)
         {
-            XmlNodeList nodes = document.SelectNodes(xpath);
-
-            if (nodes.Count == 0)
+            XmlNodeList nodes = null;
+            try
+            {
+                nodes = document.SelectNodes(xpath, new XmlNamespaceManager(document.NameTable));
+            }
+            catch (Exception e)
+            {
+                log.LogMessage(MessageImportance.High, string.Concat("Failed to match, attempting modified XPATH. Error = ".PadLeft(27), e.Message));
+            }
+            if (nodes == null || nodes.Count == 0)
             {
                 //Resolve any XML namespaces.  These are the spawn of the devil.
-                XmlNamespaceManager nameSpaces = ParseAndReturnXmlNamespaceManager(document, log);
-                xpath = ModifyXPathWithNamespace(xpath, nameSpaces);
+                //XmlNamespaceManager nameSpaces = ParseAndReturnXmlNamespaceManager(document, log, true);
+                //xpath = ModifyXPathWithNamespace(xpath, nameSpaces);
+                xpath = ReturnLocalNameXPathString(xpath);
                 log.LogMessage(MessageImportance.High, string.Concat("Attempting match with modified XPATH = ".PadLeft(27), xpath));
-                nodes = document.SelectNodes(xpath, nameSpaces);
+                nodes = document.SelectNodes(xpath, ParseAndReturnXmlNamespaceManager(document, log, true));
             }
 
             LogNodeCount(nodes, config.BreakOnNoMatch);
 
             return nodes;
+        }
+
+        private string ReturnLocalNameXPathString(string xpath)
+        {
+            var prefix = "/*[local-name()='";
+            var postfix = "']";
+
+            string newXpath = string.Empty;
+            string[] xpathArray = SplitXPathIntelligently(xpath);
+
+            foreach (string s in xpathArray)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    if (s.StartsWith("@"))
+                    {
+                        newXpath = string.Concat(newXpath, "/", s);
+                    }
+                    else
+                    {
+                        if (s.Contains(":"))
+                        {
+                            newXpath = string.Concat(newXpath, "/",s);
+                        }
+                        else
+                        {
+                            newXpath = string.Concat(newXpath, prefix, s, postfix);
+                        }
+                    }
+                }
+            }
+
+            return newXpath;
+            
+
         }
 
         /// <summary>
@@ -364,11 +411,26 @@ namespace RenderConfig.Core
                         {
                             if (!xpath.StartsWith("/"))
                             {
-                                newXpath = string.Concat(newXpath, "r:", s);
+                                if (!s.Contains(":"))
+                                {
+                                    newXpath = string.Concat(newXpath, "r:", s);
+                                }
+                                else
+                                {
+                                    newXpath = string.Concat(newXpath, s);
+                                }
                             }
                             else
                             {
-                                newXpath = string.Concat(newXpath, "/r:", s);
+                                if (!s.Contains(":"))
+
+                                {
+                                    newXpath = string.Concat(newXpath, "/r:", s);
+                                }
+                                else
+                                {
+                                    newXpath = string.Concat(newXpath, "/", s);
+                                }
                             }
                         }
                     }
@@ -404,7 +466,7 @@ namespace RenderConfig.Core
         /// <param name="document">The document.</param>
         /// <param name="log">The log.</param>
         /// <returns></returns>
-        private static XmlNamespaceManager ParseAndReturnXmlNamespaceManager(XmlDocument document, IRenderConfigLogger log)
+        private static XmlNamespaceManager ParseAndReturnXmlNamespaceManager1(XmlDocument document, IRenderConfigLogger log, bool onlyNamed = false)
         {
             Regex namespaces = new Regex(@"xmlns:?(?<ns>[a-zA-Z]*)=""(?<url>((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*))""");
             MatchCollection matches = namespaces.Matches(document.OuterXml);
@@ -427,6 +489,50 @@ namespace RenderConfig.Core
                         manager.AddNamespace(ns, match.Groups["url"].ToString());
                     }
                 }
+            }
+            return manager;
+        }
+
+
+        /// <summary>
+        /// Parses an XMLDocument and returns an XML namespace manager.
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <param name="log">The log.</param>
+        /// <returns></returns>
+        private static XmlNamespaceManager ParseAndReturnXmlNamespaceManager(XmlDocument document, IRenderConfigLogger log, bool onlyNamed = false)
+        {
+            Regex namespaces = new Regex(@"xmlns:?(?<ns>[a-zA-Z]*)=""(?<url>((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*))""");
+            MatchCollection matches = namespaces.Matches(document.OuterXml);
+            XmlNamespaceManager manager = new XmlNamespaceManager(document.NameTable);
+
+            var namespacesToAdd = new Dictionary<string, string>();
+            if (matches.Count > 0)
+            {
+                foreach (Match match in matches)
+                {
+                    if (!manager.HasNamespace(match.Groups["ns"].ToString()))
+                    {
+                        if (onlyNamed && String.IsNullOrEmpty(match.Groups["ns"].Value))
+                            continue;
+                        //We will use "r" as our pretend namespace
+                        string ns = "r";
+                        if (!String.IsNullOrEmpty(match.Groups["ns"].Value))
+                        {
+                            ns = match.Groups["ns"].ToString();
+                        }              
+                        if (!namespacesToAdd.ContainsKey(match.Groups["url"].ToString()))
+                        {
+                            namespacesToAdd.Add(match.Groups["url"].ToString(), ns);
+                        }
+                    }
+                }
+                foreach (var kv in namespacesToAdd)
+                {
+                    log.LogMessage(MessageImportance.High, string.Concat("Adding XML Namespace : ".PadLeft(27) + kv.Value + " = " + kv.Key));
+                    manager.AddNamespace(kv.Value, kv.Key);
+                }
+
             }
             return manager;
         }
